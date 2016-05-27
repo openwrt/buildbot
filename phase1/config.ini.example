@@ -9,6 +9,13 @@ bind = tcp:8010:interface=127.0.0.1
 user = example
 password = example
 
+[irc]
+host = irc.freenode.net
+port = 6667
+channel = #example-channel
+nickname = example-builder
+password = example
+
 [repo]
 url = https://git.lede-project.org/source.git
 
