@@ -20,8 +20,10 @@ password = example
 url = https://git.lede-project.org/source.git
 
 [rsync]
-url = user@example.org::upload
-password = example
+binary_url = user@example.org::upload-binary
+binary_password = example
+source_url = user@example.org::upload-sources
+source_password = example2
 
 [slave 1]
 name = example-slave-1
