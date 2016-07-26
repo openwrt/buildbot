@@ -25,6 +25,11 @@ binary_password = example
 source_url = user@example.org::upload-sources
 source_password = example2
 
+[gpg]
+keyid = 626471F1
+passfile = ./gpg-passphrase.txt
+comment = Unattended build signature
+
 [slave 1]
 name = example-slave-1
 password = example
