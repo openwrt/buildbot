@@ -17,6 +17,8 @@ if [ ! -f "$tarball" ]; then
 	finish 1
 fi
 
+umask 022
+
 mkdir "$tmpdir" || finish 2
 tar -C "$tmpdir/" -xzf "$tarball" || finish 3
 find "$tmpdir/" -type f -not -name "*.gpg" -exec gpg --no-version --batch --yes -a -b ${keyid:+-u "$keyid"} ${comment:+--comment="$comment"} ${passfile:+--passphrase-file "$passfile"} -o "{}.gpg" "{}" \; || finish 4
