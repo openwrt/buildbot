@@ -10,7 +10,7 @@ if [ $max_lifetime -le 0 ]; then
 
 elif [ $tree_age -ge $max_lifetime ]; then
 	echo "The build tree reached its maximum lifetime, cleaning up."
-	find . -mindepth 1 -maxdepth 1 -print0 | xargs -r -0 rm -vrf | while read entry do
+	find . -mindepth 1 -maxdepth 1 -print0 | xargs -r -0 rm -vrf | while read entry; do
 		printf "."
 	done
 
