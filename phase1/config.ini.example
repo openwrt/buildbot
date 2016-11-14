@@ -4,6 +4,7 @@ title_url = http://lede-project.org/
 buildbot_url = http://phase1.builds.lede-project.org/
 homedir = .
 expire = 1209600
+port = 9989
 
 [status]
 bind = tcp:8010:interface=127.0.0.1
