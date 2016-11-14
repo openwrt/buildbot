@@ -15,6 +15,9 @@ binary_url = user@example.org::upload-packages
 binary_password = example
 source_url = user@example.org::upload-sources
 source_password = example2
+sdk_url = user@example.org::download-binary
+sdk_password = example3
+sdk_pattern = lede-sdk-*.tar.xz
 
 [gpg]
 keyid = 626471F1
