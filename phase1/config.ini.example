@@ -20,6 +20,7 @@ password = example
 
 [repo]
 url = https://git.lede-project.org/source.git
+branch = master
 
 [rsync]
 binary_url = user@example.org::upload-binary
