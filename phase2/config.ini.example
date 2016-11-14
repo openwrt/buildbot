@@ -10,9 +10,6 @@ bind = tcp:8011:interface=127.0.0.1
 user = example
 password = example
 
-[repo]
-url = https://git.lede-project.org/source.git
-
 [rsync]
 binary_url = user@example.org::upload-packages
 binary_password = example
