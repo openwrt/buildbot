@@ -2,11 +2,12 @@
 
 export LC_ALL=C
 
-current_slave="$1"
-current_builder="$2"
-current_mode="$3"
+buildbot_url="$1"
+current_slave="$2"
+current_builder="$3"
+current_mode="$4"
 
-running_builders="$(wget -qO- "http://phase2.builds.lede-project.org/json/slaves/$current_slave?as_text=1" | sed -ne 's,^.*"builderName": "\(.*\)".*$,\1,p')"
+running_builders="$(wget -qO- "${buildbot_url%/}/json/slaves/$current_slave?as_text=1" | sed -ne 's,^.*"builderName": "\(.*\)".*$,\1,p')"
 
 is_running() {
 	local running_builder
