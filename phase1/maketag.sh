@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-git_author="Release System"
+git_author="Release Management"
 git_email="lede-dev@lists.infradead.org"
 
 base_url="http://downloads.lede-project.org/releases"
@@ -82,7 +82,6 @@ if git rev-parse "v${version}^{tag}" >/dev/null 2>/dev/null; then
 fi
 
 revnum="$(./scripts/getver.sh)"
-githash="$(git log --format=%h -1)"
 
 prev_branch="$(git symbolic-ref -q HEAD)"
 
@@ -128,7 +127,7 @@ done < feeds.conf.default > feeds.conf.tagged && \
 	mv feeds.conf.tagged feeds.conf.default
 
 sed -e 's!\(VERSION_NUMBER:=\$(if .*\),[^,]*)!\1,'"$version"')!g' \
-    -e 's!\(VERSION_CODE:=\$(if .*\),[^,]*)!\1,'"$revnum-$githash"')!g' \
+    -e 's!\(VERSION_CODE:=\$(if .*\),[^,]*)!\1,'"$revnum"')!g' \
     -e 's!\(VERSION_REPO:=\$(if .*\),[^,]*)!\1,'"$base_url/$version"')!g' \
 	include/version.mk > include/version.tagged && \
 		mv include/version.tagged include/version.mk
