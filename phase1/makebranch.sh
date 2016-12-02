@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-git_author="Release System"
+git_author="Release Management"
 git_email="lede-dev@lists.infradead.org"
 
 base_url="http://downloads.lede-project.org/releases"
@@ -117,13 +117,12 @@ done < feeds.conf.default > feeds.conf.branch && \
 	mv feeds.conf.branch feeds.conf.default
 
 sed -e 's!^RELEASE:=.*!RELEASE:='"$codename"'!g' \
-    -e 's!\(VERSION_NUMBER:=\$(if .*\),[^,]*)!\1,'"$version-HEAD"')!g' \
-    -e 's!\(VERSION_CODE:=\$(if .*\),[^,]*)!\1,$(REVISION))!g' \
-    -e 's!\(VERSION_REPO:=\$(if .*\),[^,]*)!\1,'"$base_url/$version-HEAD"')!g' \
+    -e 's!\(VERSION_NUMBER:=\$(if .*\),[^,]*)!\1,'"$version-CURRENT"')!g' \
+    -e 's!\(VERSION_REPO:=\$(if .*\),[^,]*)!\1,'"$base_url/$version-CURRENT"')!g' \
 	include/version.mk > include/version.branch && \
 		mv include/version.branch include/version.mk
 
-sed -e 's!http://downloads.lede-project.org/[^"]*!'"$base_url/$version-HEAD"'!g' \
+sed -e 's!http://downloads.lede-project.org/[^"]*!'"$base_url/$version-CURRENT"'!g' \
 	package/base-files/image-config.in > package/base-files/image-config.branch && \
 		mv package/base-files/image-config.branch package/base-files/image-config.in
 
