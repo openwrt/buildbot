@@ -117,12 +117,12 @@ done < feeds.conf.default > feeds.conf.branch && \
 	mv feeds.conf.branch feeds.conf.default
 
 sed -e 's!^RELEASE:=.*!RELEASE:='"$codename"'!g' \
-    -e 's!\(VERSION_NUMBER:=\$(if .*\),[^,]*)!\1,'"$version-CURRENT"')!g' \
-    -e 's!\(VERSION_REPO:=\$(if .*\),[^,]*)!\1,'"$base_url/$version-CURRENT"')!g' \
+    -e 's!\(VERSION_NUMBER:=\$(if .*\),[^,]*)!\1,'"$version-SNAPSHOT"')!g' \
+    -e 's!\(VERSION_REPO:=\$(if .*\),[^,]*)!\1,'"$base_url/$version-SNAPSHOT"')!g' \
 	include/version.mk > include/version.branch && \
 		mv include/version.branch include/version.mk
 
-sed -e 's!http://downloads.lede-project.org/[^"]*!'"$base_url/$version-CURRENT"'!g' \
+sed -e 's!http://downloads.lede-project.org/[^"]*!'"$base_url/$version-SNAPSHOT"'!g' \
 	package/base-files/image-config.in > package/base-files/image-config.branch && \
 		mv package/base-files/image-config.branch package/base-files/image-config.in
 
