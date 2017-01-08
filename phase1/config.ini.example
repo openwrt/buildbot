@@ -5,6 +5,7 @@ buildbot_url = http://phase1.builds.lede-project.org/
 homedir = .
 expire = 1209600
 port = 9989
+cc_version = le 4.9
 
 [status]
 bind = tcp:8010:interface=127.0.0.1
