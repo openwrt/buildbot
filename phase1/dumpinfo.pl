@@ -27,7 +27,7 @@ sub parse_targetinfo {
 				@target_features = split /\s+/, $1;
 			}
 			elsif ($line =~ /^@\@$/) {
-				if ($target_name && $target_arch && $target_name ne 'uml/generic' &&
+				if ($target_name && $target_arch &&
 				    !grep { $_ eq 'broken' } @target_features) {
 					$targets{$target_name} = $target_arch;
 					$architectures{$target_arch} ||= [];
@@ -51,7 +51,7 @@ sub get_targetinfo {
 		if (open M, "make -C '$target_dir' --no-print-directory DUMP=1 TARGET_BUILD=1 val.FEATURES V=s 2>/dev/null |") {
 			if (defined(my $line = readline M)) {
 				chomp $line;
-				if (grep { $_ eq 'broken' } split /\s+/, $line) {
+				if (grep { $_ eq 'broken' or $_ eq 'source-only' } split /\s+/, $line) {
 					next;
 				}
 			}
