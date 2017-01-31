@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-git_author="Release Management"
-git_email="lede-dev@lists.infradead.org"
+git_author="$(git config user.name)"
+git_email="$(git config user.email)"
+gpg_keyid=""
 
 base_url="http://downloads.lede-project.org/releases"
 
@@ -26,7 +27,7 @@ usage() {
 		echo "-e Git email [$git_email]"
 		echo "Override the email used for automated Git commits"
 		echo ""
-		echo "-k GPG key id [none]"
+		echo "-k GPG key id [${gpg_keyid:-none}]"
 		echo "Enable GPG signing of tags with given GPG key id"
 		echo ""
 		echo "-p GPG passphrase file [none]"
@@ -82,6 +83,7 @@ if git rev-parse "v${version}^{tag}" >/dev/null 2>/dev/null; then
 fi
 
 revnum="$(./scripts/getver.sh)"
+epoch="$(./scripts/get_source_date_epoch.sh)"
 
 prev_branch="$(git symbolic-ref -q HEAD)"
 
@@ -136,10 +138,14 @@ sed -e 's!http://downloads.lede-project.org/[^"]*!'"$base_url/$version"'!g' \
 	package/base-files/image-config.in > package/base-files/image-config.tagged && \
 		mv package/base-files/image-config.tagged package/base-files/image-config.in
 
+echo "$revnum" > version && git add version
+echo "$epoch" > version.date && git add version.date
+
 git commit -sm "LEDE v$version: adjust config defaults" \
 	feeds.conf.default \
 	include/version.mk \
-	package/base-files/image-config.in
+	package/base-files/image-config.in \
+	version version.date
 
 
 if [ -n "$gpg_keyid" -a -n "$gpg_passfile" ]; then
