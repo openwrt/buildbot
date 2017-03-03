@@ -21,13 +21,13 @@ umask 022
 mkdir "$tmpdir" || finish 2
 tar -C "$tmpdir/" -xzf "$tarball" || finish 3
 
-find "$tmpdir/" -type f -not -name "*.gpg" -exec gpg \
+find "$tmpdir/" -type f -not -name "*.asc" -exec gpg \
 	--no-version --batch --yes -a -b \
 	${keyid:+-u "$keyid"} \
 	${comment:+--comment="$comment"} \
 	${GNUPGHOME:+--homedir "$GNUPGHOME"} \
 	${PASSFILE:+--passphrase-file "$PASSFILE"} \
-	-o "{}.gpg" "{}" \; || finish 4
+	-o "{}.asc" "{}" \; || finish 4
 
 tar -C "$tmpdir/" -czf "$tarball" . || finish 5
 
