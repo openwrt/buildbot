@@ -28,7 +28,7 @@ sub parse_targetinfo {
 			}
 			elsif ($line =~ /^@\@$/) {
 				if ($target_name && $target_arch &&
-				    !grep { $_ eq 'broken' } @target_features) {
+				    !grep { $_ eq 'broken' or $_ eq 'source-only' } @target_features) {
 					$targets{$target_name} = $target_arch;
 					$architectures{$target_arch} ||= [];
 					push @{$architectures{$target_arch}}, $target_name;
