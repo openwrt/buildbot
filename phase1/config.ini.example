@@ -44,3 +44,4 @@ builds = 3
 name = example-slave-2
 password = example2
 builds = 1
+cleanup = 1
