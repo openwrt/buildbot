@@ -18,7 +18,7 @@ source_url = user@example.org::upload-sources
 source_password = example2
 sdk_url = user@example.org::download-binary
 sdk_password = example3
-sdk_pattern = lede-sdk-*.tar.xz
+sdk_pattern = openwrt-sdk-*.tar.xz
 
 [gpg]
 home = ~/.gnupg
