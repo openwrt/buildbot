@@ -60,7 +60,7 @@ if [ "$current_mode" = full ]; then
 		exit 1
 	fi
 
-	for build_dir in ../../*; do
+	for build_dir in ../*; do
 
 		build_dir="$(readlink -f "$build_dir")"
 
@@ -86,14 +86,17 @@ if [ "$current_mode" = full ]; then
 		)
 	done
 
-) 200>../../cleanup.lock
+) 200>../cleanup.lock
 
 #
 # Clean up current build
 #
 
 else
-	do_cleanup
+	if [ -d build ]; then (
+		cd build
+		do_cleanup
+	); fi
 fi
 
 exit 0
