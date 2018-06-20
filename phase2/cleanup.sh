@@ -9,6 +9,8 @@ current_mode="$4"
 
 running_builders="$(wget -qO- "${buildbot_url%/}/json/slaves/$current_slave?as_text=1" | sed -ne 's,^.*"builderName": "\(.*\)".*$,\1,p')"
 
+find /tmp/ -maxdepth 1 -mtime +1 '(' -name 'npm-*' -or -name 'jsmake-*' ')' -print0 | xargs -0 -r rm -vr
+
 is_running() {
 	local running_builder
 	for running_builder in $running_builders; do
