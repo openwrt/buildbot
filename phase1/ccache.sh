@@ -18,6 +18,4 @@ for dir in $(make --no-print-directory val.TOOLCHAIN_DIR val.STAGING_DIR val.STA
 	fi
 done
 
-./staging_dir/host/bin/ccache -s 2>/dev/null
-
 exit 0
