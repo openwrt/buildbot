@@ -14,6 +14,8 @@ elif [ $tree_age -ge $max_lifetime ]; then
 		printf "."
 	done
 
+	mkdir build
+
 	echo ""
 	echo "Writing new timestamp"
 	date +%s > tree.timestamp
