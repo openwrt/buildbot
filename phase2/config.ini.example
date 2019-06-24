@@ -5,6 +5,7 @@ buildbot_url = http://phase2.builds.lede-project.org/
 homedir = ../phase1
 port = 9990
 persistent = false
+git_ssh = true
 
 [status]
 bind = tcp:8011:interface=127.0.0.1
