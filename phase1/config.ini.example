@@ -6,6 +6,7 @@ homedir = .
 expire = 1209600
 port = 9989
 cc_version = le 4.9
+git_ssh = true
 
 [status]
 bind = tcp:8010:interface=127.0.0.1
