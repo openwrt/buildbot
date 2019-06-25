@@ -21,8 +21,15 @@ umask 022
 mkdir "$tmpdir" || finish 2
 tar -C "$tmpdir/" -xzf "$tarball" || finish 3
 
+loopback=""
+
+case "$(gpg --version | head -n1)" in
+	*\ 2.*) loopback=1 ;;
+esac
+
 find "$tmpdir/" -type f -not -name "*.asc" -exec gpg \
 	--no-version --batch --yes -a -b \
+	${loopback:+--pinentry-mode loopback --no-tty --passphrase-fd 0} \
 	${keyid:+-u "$keyid"} \
 	${comment:+--comment="$comment"} \
 	${GNUPGHOME:+--homedir "$GNUPGHOME"} \
