@@ -1,5 +1,7 @@
 *
 !.gitignore
+!scripts
+!scripts/*
 !phase[12]
 !phase[12]/*
 phase[12]/*/*
