@@ -2,7 +2,7 @@
 title = OpenWrt Project
 title_url = http://openwrt.org/
 buildbot_url = http://phase1.builds.openwrt.org/
-homedir = .
+workdir = /buildbot
 expire = 1209600
 port = 9989
 cc_version = le 4.9

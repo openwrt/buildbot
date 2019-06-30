@@ -2,7 +2,7 @@
 title = OpenWrt Project
 title_url = http://openwrt.org/
 buildbot_url = http://phase2.builds.openwrt.org/
-homedir = ../phase1
+workdir = /buildbot
 port = 9990
 persistent = false
 git_ssh = true
