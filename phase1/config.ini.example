@@ -43,6 +43,10 @@ keyid = 626471F1
 passfile = ./gpg-passphrase.txt
 comment = Unattended build signature
 
+[usign]
+key = RWRCSwAAA...OihABfuLvGRVfVaJ6wLf0=
+comment = Unattended build signature
+
 [slave 1]
 name = example-slave-1
 password = example
