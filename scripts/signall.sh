@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
 tarball="$1"
-keyid="$2"
-comment="$3"
 
 tmpdir="signall.$$"
 tarball="$(readlink -f "$tarball")"
@@ -12,15 +10,21 @@ finish() { rm -rf "$tmpdir"; exit $1; }
 trap "finish 255" HUP INT TERM
 
 if [ ! -f "$tarball" ]; then
-	echo "Usage: [GNUPGHOME=... [PASSFILE=...]] [USIGNKEY=... [USIGNCOMMENT=...]] \\"
-	echo "  $0 <tarball> [<keyid> [<comment>]]"
+	echo "Usage: [GPGKEY=... [GPGCOMMENT=... [GPGPASS=...]]] [USIGNKEY=... [USIGNCOMMENT=...]] $0 <tarball>" >&2
 	finish 1
 fi
 
-umask 022
+[ ! -e "$tmpdir" ] || {
+	echo "Temporary directory $tmpdir already exists!" >&2
+	finish 2
+}
 
-mkdir "$tmpdir" || finish 2
-tar -C "$tmpdir/" -xzf "$tarball" || finish 3
+umask 077
+mkdir "$tmpdir" "$tmpdir/tar" "$tmpdir/gpg" "$tmpdir/gpg/private-keys-v1.d" || finish 2
+
+umask 022
+chmod 0755 "$tmpdir/tar"
+tar -C "$tmpdir/tar/" -xzf "$tarball" || finish 3
 
 loopback=""
 
@@ -28,23 +32,35 @@ case "$(gpg --version | head -n1)" in
 	*\ 2.*) loopback=1 ;;
 esac
 
-find "$tmpdir/" -type f -not -name "*.asc" -and -not -name "*.sig" -exec gpg \
-	--no-version --batch --yes -a -b \
-	${loopback:+--pinentry-mode loopback --no-tty --passphrase-fd 0} \
-	${keyid:+-u "$keyid"} \
-	${comment:+--comment="$comment"} \
-	${GNUPGHOME:+--homedir "$GNUPGHOME"} \
-	${PASSFILE:+--passphrase-file "$PASSFILE"} \
-	-o "{}.asc" "{}" \; || finish 4
+if echo "$GPGKEY" | grep -q "BEGIN PGP PRIVATE KEY BLOCK"; then
+	umask 077
+	echo "$GPGPASS" > "$tmpdir/gpg.pass"
+	echo "$GPGKEY" | gpg --batch --homedir "$tmpdir/gpg" \
+		${loopback:+--pinentry-mode loopback --no-tty --passphrase-fd 0} \
+		${GPGPASS:+--passphrase-file "$tmpdir/gpg.pass"} \
+		--import - || finish 4
 
-export USIGNID="$(echo "$USIGNKEY" | base64 -d -i | dd bs=1 skip=32 count=8 2>/dev/null | od -v -t x1 | sed -rne 's/^0+ //p' | tr -d ' ')"
-
-if echo "$USIGNID" | grep -qxE "[0-9a-f]{16}"; then
-	find "$tmpdir/" -type f -not -name "*.asc" -and -not -name "*.sig" -exec sh -c \
-		'printf "untrusted comment: %s\n%s\n" "${USIGNCOMMENT:-key ID $USIGNID}" "$USIGNKEY" | \
-			signify-openbsd -S -s - -m "{}"' \; || finish 5
+	umask 022
+	find "$tmpdir/tar/" -type f -not -name "*.asc" -and -not -name "*.sig" -exec \
+		gpg --no-version --batch --yes -a -b \
+			--homedir "$tmpdir/gpg" \
+			${loopback:+--pinentry-mode loopback --no-tty --passphrase-fd 0} \
+			${GPGPASS:+--passphrase-file "$tmpdir/gpg.pass"} \
+			${GPGCOMMENT:+--comment="$GPGCOMMENT"} \
+			-o "{}.asc" "{}" \; || finish 4
 fi
 
-tar -C "$tmpdir/" -czf "$tarball" . || finish 6
+USIGNID="$(echo "$USIGNKEY" | base64 -d -i | dd bs=1 skip=32 count=8 2>/dev/null | od -v -t x1 | sed -rne 's/^0+ //p' | tr -d ' ')"
+
+if echo "$USIGNID" | grep -qxE "[0-9a-f]{16}"; then
+	umask 077
+	printf "untrusted comment: %s\n%s\n" "${USIGNCOMMENT:-key ID $USIGNID}" "$USIGNKEY" > "$tmpdir/usign.key"
+
+	umask 022
+	find "$tmpdir/tar/" -type f -not -name "*.asc" -and -not -name "*.sig" -exec \
+		signify-openbsd -S -s "$(readlink -f "$tmpdir/usign.key")" -m "{}" \; || finish 5
+fi
+
+tar -C "$tmpdir/tar/" -czf "$tarball" . || finish 6
 
 finish 0

@@ -32,9 +32,14 @@ sdk_password = example3
 sdk_pattern = openwrt-sdk-*.tar.xz
 
 [gpg]
-home = ~/.gnupg
-keyid = 626471F1
-passfile = ./gpg-passphrase.txt
+key = -----BEGIN PGP PRIVATE KEY BLOCK-----
+	Version: GnuPG v2
+
+	mQGNBFX4kxkBDACcTUVUl6zbn4r9tDap0/aCpcK9MO+HPatS7p2aBGY51kh78Ixr
+	...
+	HwHLaFTMvYFY7WJDwA==
+	-----END PGP PRIVATE KEY BLOCK-----
+passphrase = secret password
 comment = Unattended build signature
 
 [usign]
