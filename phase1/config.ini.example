@@ -13,7 +13,12 @@ git_ssh_key = -----BEGIN RSA PRIVATE KEY-----
 	mHzkh8Uv4OAWTjiLGycbXa0/31hu9PCeNzYmjjrp8tcGjsiJJFxydgS+wc0i2UPV
 	nSI+JbmAAF9vw6gj2i+Hqx7UloRd0tEv/leX354T5lO06LMiNhvN9g==
 	-----END RSA PRIVATE KEY-----
-
+config_seed = # Seed configuration
+	CONFIG_BUILDBOT=y
+	CONFIG_DEVEL=y
+	CONFIG_CCACHE=n
+	CONFIG_KERNEL_KALLSYMS=y
+	CONFIG_AUTOREMOVE=y
 
 [status]
 bind = tcp:8010:interface=127.0.0.1
