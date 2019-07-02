@@ -1,5 +1,11 @@
 *
 !.gitignore
+!.dockerignore
+!docker
+!docker/*
+!docker/*/*
+!docker/*/*/*
+docker/build
 !scripts
 !scripts/*
 !phase[12]

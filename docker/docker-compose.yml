@@ -1,0 +1,83 @@
+version: '2'
+
+services:
+  rsync-server:
+    build:
+      context: ../
+      dockerfile: docker/rsync/Dockerfile
+    image: rsync:latest
+    restart: always
+    cpuset: '0'
+    environment:
+      SHARE_USER: upload
+      SHARE_PASSWORD: secret
+    volumes:
+      - './build/output:/data'
+
+  buildmaster-phase1:
+    build:
+      context: ../
+      dockerfile: docker/buildmaster/Dockerfile
+    image: buildmaster:latest
+    restart: always
+    cpuset: '0'
+    environment:
+      BUILDMASTER_PHASE: 1
+      BUILDMASTER_CONFIG: /config.ini
+    ports:
+      - '8010:8010'
+      - '9989:9989'
+    volumes:
+      - './config.phase1.ini:/config.ini'
+      - './build/master-phase1:/master'
+
+  buildmaster-phase2:
+    build:
+      context: ../
+      dockerfile: docker/buildmaster/Dockerfile
+    image: buildmaster:latest
+    restart: always
+    cpuset: '0'
+    environment:
+      BUILDMASTER_PHASE: 2
+      BUILDMASTER_CONFIG: /config.ini
+    ports:
+      - '8011:8011'
+      - '9990:9990'
+    volumes:
+      - './config.phase2.ini:/config.ini'
+      - './build/master-phase2:/master'
+
+  buildslave-phase1:
+    build:
+      context: ../
+      dockerfile: docker/buildslave/Dockerfile
+    image: buildslave:latest
+    restart: always
+    cpuset: 1-3
+    environment:
+      BUILDSLAVE_MASTER: buildmaster-phase1:9989
+      BUILDSLAVE_NAME: buildslave-phase1
+      BUILDSLAVE_PASSWORD: secret
+    links:
+      - 'rsync-server'
+      - 'buildmaster-phase1'
+    volumes:
+      - './build/slave-phase1:/builder'
+
+  buildslave-phase2:
+    build:
+      context: ../
+      dockerfile: docker/buildslave/Dockerfile
+    image: buildslave:latest
+    restart: always
+    cpuset: 1-3
+    environment:
+      BUILDSLAVE_MASTER: buildmaster-phase2:9990
+      BUILDSLAVE_NAME: buildslave-phase2
+      BUILDSLAVE_PASSWORD: secret
+    links:
+      - 'rsync-server'
+      - 'buildmaster-phase2'
+    volumes:
+      - './build/slave-phase2:/builder'
