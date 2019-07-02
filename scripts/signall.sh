@@ -7,10 +7,28 @@ tarball="$(readlink -f "$tarball")"
 
 finish() { rm -rf "$tmpdir"; exit $1; }
 
+iniget() {
+	local file="$1" section="$2" option="$3"
+
+	sed -rne '
+		/\['"$section"'\]/,$ {
+			/^[ \t]*'"$option"'[ \t]*=[ \t]*/ {
+				s/^[^=]+=[ \t]*//; h;
+				:c; n;
+				/^([ \t]|$)/ {
+					s/^[ \t]+//; H;
+					b c
+				};
+				x; p; q
+			}
+		}
+	' "$file" | sed -e :a -e '/^\n*$/{$d;N;ba' -e '}'
+}
+
 trap "finish 255" HUP INT TERM
 
-if [ ! -f "$tarball" ]; then
-	echo "Usage: [GPGKEY=... [GPGCOMMENT=... [GPGPASS=...]]] [USIGNKEY=... [USIGNCOMMENT=...]] $0 <tarball>" >&2
+if [ ! -f "$tarball" ] || [ ! -f "${CONFIG_INI:-config.ini}" ]; then
+	echo "Usage: [CONFIG_INI=...] $0 <tarball>" >&2
 	finish 1
 fi
 
@@ -32,6 +50,13 @@ case "$(gpg --version | head -n1)" in
 	*\ 2.*) loopback=1 ;;
 esac
 
+GPGKEY="$(iniget "${CONFIG_INI:-config.ini}" gpg key)"
+GPGPASS="$(iniget "${CONFIG_INI:-config.ini}" gpg passphrase)"
+GPGCOMMENT="$(iniget "${CONFIG_INI:-config.ini}" gpg comment)"
+
+USIGNKEY="$(iniget "${CONFIG_INI:-config.ini}" usign key)"
+USIGNCOMMENT="$(iniget "${CONFIG_INI:-config.ini}" usign comment)"
+
 if echo "$GPGKEY" | grep -q "BEGIN PGP PRIVATE KEY BLOCK"; then
 	umask 077
 	echo "$GPGPASS" > "$tmpdir/gpg.pass"
@@ -50,9 +75,14 @@ if echo "$GPGKEY" | grep -q "BEGIN PGP PRIVATE KEY BLOCK"; then
 			-o "{}.asc" "{}" \; || finish 4
 fi
 
-USIGNID="$(echo "$USIGNKEY" | base64 -d -i | dd bs=1 skip=32 count=8 2>/dev/null | od -v -t x1 | sed -rne 's/^0+ //p' | tr -d ' ')"
+if [ -n "$USIGNKEY" ]; then
+	USIGNID="$(echo "$USIGNKEY" | base64 -d -i | dd bs=1 skip=32 count=8 2>/dev/null | od -v -t x1 | sed -rne 's/^0+ //p' | tr -d ' ')"
 
-if echo "$USIGNID" | grep -qxE "[0-9a-f]{16}"; then
+	if ! echo "$USIGNID" | grep -qxE "[0-9a-f]{16}"; then
+		echo "Invalid usign key specified" >&2
+		finish 5
+	fi
+
 	umask 077
 	printf "untrusted comment: %s\n%s\n" "${USIGNCOMMENT:-key ID $USIGNID}" "$USIGNKEY" > "$tmpdir/usign.key"
 
