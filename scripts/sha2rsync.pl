@@ -44,10 +44,10 @@ my $torsync_fh = undef;
 
 open($torsync_fh, ">", $torsync) or die("can't create output file!");
 open($llist_fh, "<", $llist) or die("can't read local list!");
-open($rlist_fh, "<", $rlist);
+open($rlist_fh, "<", $rlist) or $rlist_fh = undef;
 
 my $lline = readline($llist_fh);
-my $rline = readline($rlist_fh);
+my $rline = defined($rlist_fh) ? readline($rlist_fh) : undef;
 
 
 MAINLOOP: while () {
@@ -97,9 +97,21 @@ while (defined($lline)) {
 
 # unconditionally add some mandatory files to rsynclist
 # add them last so they're transferred last: if everything else transferred correctly
-add_file("packages/Packages.asc");
-add_file("sha256sums.asc");
-add_file("sha256sums");
+my @additional_files = qw(
+	packages/Packages.asc
+	packages/Packages.sig
+	sha256sums.asc
+	sha256sums.sig
+	sha256sums
+);
+
+(my $basedir = $llist) =~ s!/[^/]+$!!;
+
+foreach my $file (@additional_files) {
+	if (-f "$basedir/$file") {
+		add_file($file);
+	}
+}
 
 exit (0);
 
