@@ -28,7 +28,7 @@ services:
       - '8010:8010'
       - '9989:9989'
     volumes:
-      - './config.phase1.ini:/config.ini'
+      - './config.ini:/config.ini'
       - './build/master-phase1:/master'
 
   buildmaster-phase2:
@@ -45,7 +45,7 @@ services:
       - '8011:8011'
       - '9990:9990'
     volumes:
-      - './config.phase2.ini:/config.ini'
+      - './config.ini:/config.ini'
       - './build/master-phase2:/master'
 
   buildslave-phase1:
