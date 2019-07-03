@@ -1,8 +1,13 @@
 [general]
 title = OpenWrt Project
 title_url = http://openwrt.org/
-buildbot_url = http://phase1.builds.openwrt.org/
 workdir = /buildbot
+
+[phase1]
+buildbot_url = http://phase1.builds.openwrt.org/
+status_bind = tcp:8010:interface=127.0.0.1
+status_user = example
+status_password = example
 expire = 1209600
 port = 9989
 cc_version = le 4.9
@@ -19,11 +24,6 @@ config_seed = # Seed configuration
 	CONFIG_CCACHE=n
 	CONFIG_KERNEL_KALLSYMS=y
 	CONFIG_AUTOREMOVE=y
-
-[status]
-bind = tcp:8010:interface=127.0.0.1
-user = example
-password = example
 
 [irc]
 host = irc.freenode.net
@@ -58,11 +58,13 @@ key = RWRCSwAAA...OihABfuLvGRVfVaJ6wLf0=
 comment = Unattended build signature
 
 [slave 1]
+phase = 1
 name = example-slave-1
 password = example
 builds = 3
 
 [slave 2]
+phase = 1
 name = example-slave-2
 password = example2
 builds = 1
