@@ -10,7 +10,9 @@
 	exit 2
 }
 
-/usr/bin/buildslave create-slave --umask=022 /builder \
+rm -f /builder/buildbot.tac
+
+/usr/bin/buildslave create-slave --force --umask=022 /builder \
     "$BUILDSLAVE_MASTER" "$BUILDSLAVE_NAME" "$BUILDSLAVE_PASSWORD"
 
 echo "$BUILDSLAVE_ADMIN" > /builder/info/admin
