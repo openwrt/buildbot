@@ -68,9 +68,9 @@ if echo "$GPGKEY" | grep -q "BEGIN PGP PRIVATE KEY BLOCK"; then
 	umask 022
 	find "$tmpdir/tar/" -type f -not -name "*.asc" -and -not -name "*.sig" -exec \
 		gpg --no-version --batch --yes -a -b \
-			--homedir "$tmpdir/gpg" \
+			--homedir "$(readlink -f "$tmpdir/gpg")" \
 			${loopback:+--pinentry-mode loopback --no-tty --passphrase-fd 0} \
-			${GPGPASS:+--passphrase-file "$tmpdir/gpg.pass"} \
+			${GPGPASS:+--passphrase-file "$(readlink -f "$tmpdir/gpg.pass")"} \
 			${GPGCOMMENT:+--comment="$GPGCOMMENT"} \
 			-o "{}.asc" "{}" \; || finish 4
 fi
