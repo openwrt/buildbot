@@ -2,12 +2,12 @@
 
 export LC_ALL=C
 
-buildbot_url="$1"
+master_url="$1"
 current_slave="$2"
 current_builder="$3"
 current_mode="$4"
 
-running_builders="$(wget -qO- "${buildbot_url%/}/json/slaves/$current_slave?as_text=1" | sed -ne 's,^.*"builderName": "\(.*\)".*$,\1,p')"
+running_builders="$(wget -qO- "${master_url%/}/json/slaves/$current_slave?as_text=1" | sed -ne 's,^.*"builderName": "\(.*\)".*$,\1,p')"
 
 find /tmp/ -maxdepth 1 -mtime +1 '(' -name 'npm-*' -or -name 'jsmake-*' ')' -print0 | xargs -0 -r rm -vr
 
@@ -15,7 +15,7 @@ is_running() {
 	local running_builder
 	for running_builder in $running_builders; do
 		if [ "${running_builder//\//_}" = "${1//\//_}" ]; then
-			return 0
+				return 0
 		fi
 	done
 	return 1
@@ -24,12 +24,19 @@ is_running() {
 do_cleanup() {
 	printf "Cleaning up '$current_builder' work directory"
 
-	rm -f cleanup.sh
-	rm -vrf sdk/ | while read entry; do
-		case "$entry" in *directory:*)
-			printf "."
-		esac
-	done
+	if [ -d .git ]; then
+		echo " using git"
+		git reset --hard HEAD
+		git clean -f -d -x
+	else
+		find . -mindepth 1 -maxdepth 1 | while read entry; do
+			rm -vrf "$entry" | while read entry2; do
+				case "$entry2" in *directory[:\ ]*)
+					printf "."
+				esac
+			done
+		done
+	fi
 
 	echo ""
 }
@@ -55,11 +62,11 @@ if [ "$current_mode" = full ]; then
 		exit 1
 	fi
 
-	for build_dir in ../../*; do
+	for build_dir in ../*; do
 
 		build_dir="$(readlink -f "$build_dir")"
 
-		if [ -z "$build_dir" ] || [ ! -d "$build_dir/build/sdk" ]; then
+		if [ -z "$build_dir" ] || [ ! -d "$build_dir/build" ]; then
 			continue
 		fi
 
@@ -72,24 +79,21 @@ if [ "$current_mode" = full ]; then
 
 		(
 			cd "$build_dir/build"
-
-			#if [ -n "$(git status --porcelain | grep -v update_hostkey.sh | grep -v cleanup.sh)" ]; then
-			if [ -d sdk ]; then
-				do_cleanup
-			else
-				echo "Skipping clean '$current_builder' work directory."
-			fi
+			do_cleanup
 		)
 	done
 
-) 200>../../cleanup.lock
+) 200>../cleanup.lock
 
 #
 # Clean up current build
 #
 
 else
-	do_cleanup
+	if [ -d build ]; then (
+		cd build
+		do_cleanup
+	); fi
 fi
 
 exit 0
