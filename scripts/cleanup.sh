@@ -66,7 +66,7 @@ if [ "$current_mode" = full ]; then
 
 		build_dir="$(readlink -f "$build_dir")"
 
-		if [ -z "$build_dir" ] || [ ! -d "$build_dir/build" ]; then
+		if [ -z "$build_dir" ] || [ -L "$build_dir" ] || [ ! -d "$build_dir/build" ]; then
 			continue
 		fi
 
