@@ -1,6 +1,7 @@
 *
 !.gitignore
 !.dockerignore
+!build-docker-images.sh
 !docker
 !docker/*
 !docker/*/*
