@@ -84,11 +84,11 @@ if [ -n "$USIGNKEY" ]; then
 	fi
 
 	umask 077
-	printf "untrusted comment: %s\n%s\n" "${USIGNCOMMENT:-key ID $USIGNID}" "$USIGNKEY" > "$tmpdir/usign.key"
+	printf "untrusted comment: %s\n%s\n" "${USIGNCOMMENT:-key ID $USIGNID}" "$USIGNKEY" > "$tmpdir/usign.sec"
 
 	umask 022
 	find "$tmpdir/tar/" -type f -not -name "*.asc" -and -not -name "*.sig" -exec \
-		signify-openbsd -S -s "$(readlink -f "$tmpdir/usign.key")" -m "{}" \; || finish 5
+		signify-openbsd -S -s "$(readlink -f "$tmpdir/usign.sec")" -m "{}" \; || finish 5
 fi
 
 tar -C "$tmpdir/tar/" -czf "$tarball" . || finish 6
