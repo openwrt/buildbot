@@ -1,3 +1,4 @@
 docker/rsync
+!docker/rsync/files
 docker/build
 docker/docker-compose.yml

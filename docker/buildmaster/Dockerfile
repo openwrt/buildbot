@@ -1,4 +1,4 @@
-FROM        debian:9
+FROM        debian:10
 MAINTAINER  OpenWrt Maintainers
 
 ARG         DEBIAN_FRONTEND=noninteractive
@@ -20,9 +20,15 @@ RUN apt-get update && \
 	pv \
 	gosu \
 	signify-openbsd \
+	python3-pip \
 	wget && \
     apt-get clean && \
-    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
+    pip3 install \
+	"buildbot-www==2.0.1" \
+	"buildbot-waterfall-view==2.0.1" \
+	"buildbot-console-view==2.0.1" \
+	"buildbot-grid-view==2.0.1"
 
 ENV LANG=en_US.utf8
 
