@@ -7,15 +7,17 @@ current_slave="$2"
 current_builder="$3"
 current_mode="$4"
 
-running_builders="$(wget -qO- "${master_url%/}/json/slaves/$current_slave?as_text=1" | sed -ne 's,^.*"builderName": "\(.*\)".*$,\1,p')"
+worker_id="$(wget -qO- "${master_url%/}/api/v2/workers/$current_slave" | sed -rne 's#^ +"workerid": ([0-9]+),?$#\1#p')"
+active_builder_ids="$(wget -qO- "${master_url%/}/api/v2/workers/$worker_id/builds" | sed -rne '/"builderid"/ { s/^.+: ([0-9]+),$/\1/; h }; /"state_string"/ { s/^.+: "([^"]*)".*$/\1/; H; x; s/\n/ /; p }' | sed -ne 's/ building$//p')"
 
 find /tmp/ -maxdepth 1 -mtime +1 '(' -name 'npm-*' -or -name 'jsmake-*' ')' -print0 | xargs -0 -r rm -vr
 
 is_running() {
-	local running_builder
-	for running_builder in $running_builders; do
-		if [ "${running_builder//\//_}" = "${1//\//_}" ]; then
-				return 0
+	local id="$(wget -qO- "${master_url%/}/api/v2/builders/${1//\//_}" | sed -rne 's#^ +"builderid": ([0-9]+),$#\1#p')"
+	local running_builder_id
+	for running_builder_id in $active_builder_ids; do
+		if [ "$running_builder_id" = "$id" ]; then
+			return 0
 		fi
 	done
 	return 1
@@ -64,13 +66,12 @@ if [ "$current_mode" = full ]; then
 
 	for build_dir in ../*; do
 
+		current_builder="${build_dir##*/}"
 		build_dir="$(readlink -f "$build_dir")"
 
 		if [ -z "$build_dir" ] || [ -L "$build_dir" ] || [ ! -d "$build_dir/build" ]; then
 			continue
 		fi
-
-		current_builder="${build_dir##*/}"
 
 		if is_running "$current_builder"; then
 			echo "Skipping currently active '$current_builder' work directory."
