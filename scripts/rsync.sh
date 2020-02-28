@@ -2,6 +2,8 @@
 
 export LC_ALL=C
 
+set -o pipefail
+
 PV=`which pv`
 RSYNC=rsync
 
