@@ -29,6 +29,8 @@ services:
       - '9989:9989'
     volumes:
       - './config.ini:/config.ini'
+      - './certs/buildmaster-phase1.crt:/certs/master.crt'
+      - './certs/buildmaster-phase1.key:/certs/master.key'
       - './build/master-phase1:/master'
 
   buildmaster-phase2:
@@ -46,6 +48,8 @@ services:
       - '9990:9990'
     volumes:
       - './config.ini:/config.ini'
+      - './certs/buildmaster-phase2.crt:/certs/master.crt'
+      - './certs/buildmaster-phase2.key:/certs/master.key'
       - './build/master-phase2:/master'
 
   buildslave-phase1:
@@ -59,10 +63,12 @@ services:
       BUILDSLAVE_MASTER: buildmaster-phase1:9989
       BUILDSLAVE_NAME: buildslave-phase1
       BUILDSLAVE_PASSWORD: secret
+      BUILDSLAVE_TLS: '1'
     links:
       - 'rsync-server'
       - 'buildmaster-phase1'
     volumes:
+      - './certs/ca.crt:/certs/ca.pem'
       - './build/slave-phase1:/builder'
 
   buildslave-phase2:
@@ -76,8 +82,10 @@ services:
       BUILDSLAVE_MASTER: buildmaster-phase2:9990
       BUILDSLAVE_NAME: buildslave-phase2
       BUILDSLAVE_PASSWORD: secret
+      BUILDSLAVE_TLS: '1'
     links:
       - 'rsync-server'
       - 'buildmaster-phase2'
     volumes:
+      - './certs/ca.crt:/certs/ca.pem'
       - './build/slave-phase2:/builder'

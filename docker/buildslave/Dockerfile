@@ -1,4 +1,4 @@
-FROM        debian:9
+FROM        debian:10
 MAINTAINER  OpenWrt Maintainers
 
 ARG         DEBIAN_FRONTEND=noninteractive
@@ -9,27 +9,30 @@ ENV         BUILDSLAVE_DESCRIPTION Buildslave Docker Instance
 
 USER root
 
-RUN apt-get update && \
-    apt-get install -y \
-	pwgen \
-	locales \
-	buildbot-slave \
-	build-essential \
-	git-core \
-	subversion \
-	libncurses5-dev \
-	gawk \
-	unzip \
-	pv \
-	gosu \
-	signify-openbsd \
-	python3 \
-	wget \
-	curl \
-	ccache \
-	rsync && \
-    apt-get clean && \
-    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+RUN echo 'deb http://deb.debian.org/debian testing main' \
+		> /etc/apt/sources.list.d/testing.list && \
+	apt-get update && \
+	apt-get install -t buster -y \
+		pwgen \
+		locales \
+		build-essential \
+		git-core \
+		subversion \
+		libncurses5-dev \
+		gawk \
+		unzip \
+		pv \
+		gosu \
+		signify-openbsd \
+		python3 \
+		wget \
+		curl \
+		ccache \
+		rsync && \
+	apt-get install -t testing -y \
+		buildbot-worker && \
+	apt-get clean && \
+	localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 
 ENV LANG=en_US.utf8
 
