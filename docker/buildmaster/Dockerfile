@@ -2,16 +2,16 @@ FROM        debian:10
 MAINTAINER  OpenWrt Maintainers
 
 ARG         DEBIAN_FRONTEND=noninteractive
+ARG         BUILDBOT_VERSION=2.10.1
 
 ENV         BUILDMASTER_CONFIG config.ini
 ENV         BUILDMASTER_PHASE  1
 
 USER root
 
-RUN echo 'deb http://deb.debian.org/debian testing main' \
-		> /etc/apt/sources.list.d/testing.list && \
+RUN \
 	apt-get update && \
-	apt-get install -t buster -y \
+	apt-get install -y \
 		pwgen \
 		locales \
 		build-essential \
@@ -23,15 +23,15 @@ RUN echo 'deb http://deb.debian.org/debian testing main' \
 		signify-openbsd \
 		python3-pip \
 		wget && \
-	apt-get install -t testing -y \
-		buildbot && \
 	apt-get clean && \
-	localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
+	localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+
+RUN \
 	pip3 install \
-		"buildbot-www==2.4.1" \
-		"buildbot-waterfall-view==2.4.1" \
-		"buildbot-console-view==2.4.1" \
-		"buildbot-grid-view==2.4.1"
+		"buildbot-www==$BUILDBOT_VERSION" \
+		"buildbot-waterfall-view==$BUILDBOT_VERSION" \
+		"buildbot-console-view==$BUILDBOT_VERSION" \
+		"buildbot-grid-view==$BUILDBOT_VERSION"
 
 ENV LANG=en_US.utf8
 
@@ -41,9 +41,13 @@ COPY phase1 /phase1
 COPY phase2 /phase2
 COPY scripts /scripts
 
-RUN mkdir /master && \
+RUN \
+    groupadd buildbot && \
+    useradd \
+	--create-home --home-dir /master \
+	--comment "OpenWrt buildbot" \
+	--gid buildbot --shell /bin/bash buildbot && \
     chown buildbot:buildbot /master && \
-    usermod --home /master buildbot && \
     chmod 0755 /entry.sh /start.sh
 
 VOLUME [ "/master" ]

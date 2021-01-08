@@ -12,7 +12,7 @@
 
 rm -f /builder/buildbot.tac
 
-/usr/bin/buildbot-worker create-worker --force --umask="0o22" /builder \
+/usr/local/bin/buildbot-worker create-worker --force --umask="0o22" /builder \
     "$BUILDSLAVE_MASTER" "$BUILDSLAVE_NAME" "$BUILDSLAVE_PASSWORD"
 
 if [ "$BUILDSLAVE_TLS" = 1 ]; then
@@ -28,4 +28,4 @@ echo "$BUILDSLAVE_DESCRIPTION" > /builder/info/host
 unset BUILDSLAVE_ADMIN BUILDSLAVE_DESCRIPTION BUILDSLAVE_MASTER BUILDSLAVE_NAME BUILDSLAVE_PASSWORD
 
 rm -f /builder/twistd.pid
-exec /usr/bin/buildbot-worker start --nodaemon /builder
+exec /usr/local/bin/buildbot-worker start --nodaemon /builder
