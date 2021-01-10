@@ -17,6 +17,7 @@ RUN \
 		ccache \
 		curl \
 		gawk \
+		gcc-multilib \
 		git-core \
 		gosu \
 		libncurses5-dev \
