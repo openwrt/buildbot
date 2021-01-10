@@ -28,6 +28,7 @@ RUN \
 		pwgen \
 		python3 \
 		python3-pip \
+		qemu-utils \
 		unzip \
 		wget && \
 	apt-get clean && \
