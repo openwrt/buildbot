@@ -13,23 +13,23 @@ USER root
 RUN \
 	apt-get update && \
 	apt-get install -y \
-		pwgen \
-		locales \
 		build-essential \
-		git-core \
-		subversion \
-		libncurses5-dev \
+		ccache \
+		curl \
 		gawk \
-		unzip \
-		pv \
+		git-core \
 		gosu \
+		libncurses5-dev \
+		locales \
+		rsync \
 		signify-openbsd \
+		subversion \
+		pv \
+		pwgen \
 		python3 \
 		python3-pip \
-		wget \
-		curl \
-		ccache \
-		rsync && \
+		unzip \
+		wget && \
 	apt-get clean && \
 	localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 

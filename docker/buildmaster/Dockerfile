@@ -12,15 +12,15 @@ USER root
 RUN \
 	apt-get update && \
 	apt-get install -y \
-		pwgen \
-		locales \
 		build-essential \
-		libncurses5-dev \
 		gawk \
 		git-core \
-		pv \
 		gosu \
+		libncurses5-dev \
+		locales \
 		signify-openbsd \
+		pv \
+		pwgen \
 		python3-pip \
 		wget && \
 	apt-get clean && \
