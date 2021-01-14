@@ -31,7 +31,9 @@ RUN \
 		"buildbot-www==$BUILDBOT_VERSION" \
 		"buildbot-waterfall-view==$BUILDBOT_VERSION" \
 		"buildbot-console-view==$BUILDBOT_VERSION" \
-		"buildbot-grid-view==$BUILDBOT_VERSION"
+		"buildbot-grid-view==$BUILDBOT_VERSION" \
+		pyOpenSSL \
+		service_identity
 
 ENV LANG=en_US.utf8
 

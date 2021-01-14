@@ -12,7 +12,9 @@
 
 rm -f /builder/buildbot.tac
 
-/usr/local/bin/buildbot-worker create-worker --force --umask="0o22" /builder \
+use_tls=""
+[ "$BUILDSLAVE_TLS" = 1 ] && use_tls="--use-tls"
+/usr/local/bin/buildbot-worker create-worker --force --umask="0o22" $use_tls /builder \
     "$BUILDSLAVE_MASTER" "$BUILDSLAVE_NAME" "$BUILDSLAVE_PASSWORD"
 
 if [ "$BUILDSLAVE_TLS" = 1 ]; then
