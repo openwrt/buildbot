@@ -17,3 +17,7 @@ phase[12]/http.log
 phase[12]/key-build*
 phase[12]/state.sqlite*
 phase[12]/twistd.*
+!.gitlab-ci.yml
+!.gitlab
+!.gitlab/*
+!.gitlab/**/*

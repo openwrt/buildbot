@@ -1,0 +1,12 @@
+variables:
+  BUILDBOT_VERSION: 2.10.1
+
+include:
+  - local: .gitlab/docker.yml
+  - local: .gitlab/docker/buildmaster/gitlab.yml
+  - local: .gitlab/docker/buildslave/gitlab.yml
+
+stages:
+  - docker
+  - docker test
+  - docker deploy
