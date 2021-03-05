@@ -33,6 +33,7 @@ RUN \
 		"buildbot-waterfall-view==$BUILDBOT_VERSION" \
 		"buildbot-console-view==$BUILDBOT_VERSION" \
 		"buildbot-grid-view==$BUILDBOT_VERSION" \
+		"buildbot-worker==$BUILDBOT_VERSION" \
 		pyOpenSSL \
 		service_identity
 
