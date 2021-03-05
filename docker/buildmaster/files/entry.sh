@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
-chown buildbot:buildbot /master
+chown --recursive buildbot:buildbot /master /config /certs
+chmod 0700 /master /config /certs
 
 /usr/sbin/gosu buildbot /start.sh "$@"
