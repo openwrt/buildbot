@@ -20,7 +20,7 @@ use_tls=""
 if [ "$BUILDSLAVE_TLS" = 1 ]; then
 	sed -i \
 		-e 's#(buildmaster_host, port, #(None, None, #' \
-		-e 's#allow_shutdown=allow_shutdown#&, connection_string="TLS:%s:%d:trustRoots=/certs" %(buildmaster_host, port)#' \
+		-e 's#allow_shutdown=allow_shutdown#&, connection_string="SSL:%s:%d" %(buildmaster_host, port)#' \
 		/builder/buildbot.tac
 fi
 
