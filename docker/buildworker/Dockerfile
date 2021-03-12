@@ -24,6 +24,7 @@ RUN \
 		rsync \
 		signify-openbsd \
 		subversion \
+		swig \
 		pv \
 		pwgen \
 		python3 \
