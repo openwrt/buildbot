@@ -4,7 +4,7 @@ variables:
 include:
   - local: .gitlab/docker.yml
   - local: .gitlab/docker/buildmaster/gitlab.yml
-  - local: .gitlab/docker/buildslave/gitlab.yml
+  - local: .gitlab/docker/buildworker/gitlab.yml
 
 stages:
   - docker

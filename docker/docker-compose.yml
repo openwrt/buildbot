@@ -52,40 +52,40 @@ services:
       - './certs/buildmaster-phase2.key:/certs/master.key'
       - './build/master-phase2:/master'
 
-  buildslave-phase1:
+  buildworker-phase1:
     build:
       context: ../
-      dockerfile: docker/buildslave/Dockerfile
-    image: buildslave:latest
+      dockerfile: docker/buildworker/Dockerfile
+    image: buildworker:latest
     restart: always
     cpuset: 1-3
     environment:
-      BUILDSLAVE_MASTER: buildmaster-phase1:9989
-      BUILDSLAVE_NAME: buildslave-phase1
-      BUILDSLAVE_PASSWORD: secret
-      BUILDSLAVE_TLS: '1'
+      BUILDWORKER_MASTER: buildmaster-phase1:9989
+      BUILDWORKER_NAME: buildworker-phase1
+      BUILDWORKER_PASSWORD: secret
+      BUILDWORKER_TLS: '1'
     links:
       - 'rsync-server'
       - 'buildmaster-phase1'
     volumes:
       - './certs/ca.crt:/certs/ca.pem'
-      - './build/slave-phase1:/builder'
+      - './build/worker-phase1:/builder'
 
-  buildslave-phase2:
+  buildworker-phase2:
     build:
       context: ../
-      dockerfile: docker/buildslave/Dockerfile
-    image: buildslave:latest
+      dockerfile: docker/buildworker/Dockerfile
+    image: buildworker:latest
     restart: always
     cpuset: 1-3
     environment:
-      BUILDSLAVE_MASTER: buildmaster-phase2:9990
-      BUILDSLAVE_NAME: buildslave-phase2
-      BUILDSLAVE_PASSWORD: secret
-      BUILDSLAVE_TLS: '1'
+      BUILDWORKER_MASTER: buildmaster-phase2:9990
+      BUILDWORKER_NAME: buildworker-phase2
+      BUILDWORKER_PASSWORD: secret
+      BUILDWORKER_TLS: '1'
     links:
       - 'rsync-server'
       - 'buildmaster-phase2'
     volumes:
       - './certs/ca.crt:/certs/ca.pem'
-      - './build/slave-phase2:/builder'
+      - './build/worker-phase2:/builder'

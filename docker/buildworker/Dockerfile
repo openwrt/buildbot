@@ -4,9 +4,9 @@ MAINTAINER  OpenWrt Maintainers
 ARG         DEBIAN_FRONTEND=noninteractive
 ARG         BUILDBOT_VERSION=2.10.1
 
-ENV         BUILDSLAVE_MASTER builds.openwrt.org:9990
-ENV         BUILDSLAVE_ADMIN contact@openwrt.org
-ENV         BUILDSLAVE_DESCRIPTION Buildslave Docker Instance
+ENV         BUILDWORKER_MASTER builds.openwrt.org:9990
+ENV         BUILDWORKER_ADMIN contact@openwrt.org
+ENV         BUILDWORKER_DESCRIPTION Buildworker Docker Instance
 
 USER root
 
@@ -42,8 +42,8 @@ RUN pip3 install \
 
 ENV LANG=en_US.utf8
 
-COPY docker/buildslave/files/entry.sh /entry.sh
-COPY docker/buildslave/files/start.sh /start.sh
+COPY docker/buildworker/files/entry.sh /entry.sh
+COPY docker/buildworker/files/start.sh /start.sh
 
 RUN \
     groupadd buildbot && \

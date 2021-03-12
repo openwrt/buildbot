@@ -3,11 +3,11 @@
 export LC_ALL=C
 
 master_url="$1"
-current_slave="$2"
+current_worker="$2"
 current_builder="$3"
 current_mode="$4"
 
-worker_id="$(wget -qO- "${master_url%/}/api/v2/workers/$current_slave" | sed -rne 's#^ +"workerid": ([0-9]+),?$#\1#p')"
+worker_id="$(wget -qO- "${master_url%/}/api/v2/workers/$current_worker" | sed -rne 's#^ +"workerid": ([0-9]+),?$#\1#p')"
 active_builder_ids="$(wget -qO- "${master_url%/}/api/v2/workers/$worker_id/builds" | sed -rne '/"builderid"/ { s/^.+: ([0-9]+),$/\1/; h }; /"state_string"/ { s/^.+: "([^"]*)".*$/\1/; H; x; s/\n/ /; p }' | sed -ne 's/ building$//p')"
 
 find /tmp/ -maxdepth 1 -mtime +1 '(' -name 'npm-*' -or -name 'jsmake-*' ')' -print0 | xargs -0 -r rm -vr

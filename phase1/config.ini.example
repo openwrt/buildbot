@@ -57,15 +57,15 @@ comment = Unattended build signature
 key = RWRCSwAAA...OihABfuLvGRVfVaJ6wLf0=
 comment = Unattended build signature
 
-[slave 1]
+[worker 1]
 phase = 1
-name = example-slave-1
+name = example-worker-1
 password = example
 builds = 3
 
-[slave 2]
+[worker 2]
 phase = 1
-name = example-slave-2
+name = example-worker-2
 password = example2
 builds = 1
 cleanup = 1
