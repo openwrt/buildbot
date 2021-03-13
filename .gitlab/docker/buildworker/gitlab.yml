@@ -2,7 +2,7 @@ build Docker image buildworker:
   stage: docker
   extends: .build Docker image
 
-test Docker image buildworker:
+.test Docker image buildworker:
   stage: docker test
   extends: .docker in docker
   needs: ["build Docker image buildworker"]
@@ -18,4 +18,4 @@ test Docker image buildworker:
 deploy Docker image buildworker:
   stage: docker deploy
   extends: .deploy Docker image
-  needs: ["test Docker image buildworker"]
+  #needs: ["test Docker image buildworker"]
