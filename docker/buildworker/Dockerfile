@@ -28,6 +28,7 @@ RUN \
 		swig \
 		pv \
 		pwgen \
+		python \
 		python3 \
 		python3-pip \
 		qemu-utils \
