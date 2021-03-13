@@ -1,6 +1,9 @@
 .docker in docker:
   tags:
-    - gce
+    - linux
+    - openwrt
+    - light-jobs
+    - docker-privileged
   image: docker:19.03.7
   services:
     - docker:19.03.7-dind
