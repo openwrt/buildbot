@@ -1,5 +1,5 @@
 variables:
-  BUILDBOT_VERSION: 3.0.0
+  BUILDBOT_VERSION: 3.0.1
 
 include:
   - local: .gitlab/docker.yml
