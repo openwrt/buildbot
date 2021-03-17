@@ -29,7 +29,6 @@ RUN \
 RUN pip3 install -U pip
 RUN \
 	pip3 install \
-		"sqlalchemy==1.3.23" \
 		"buildbot-www==$BUILDBOT_VERSION" \
 		"buildbot-waterfall-view==$BUILDBOT_VERSION" \
 		"buildbot-console-view==$BUILDBOT_VERSION" \
