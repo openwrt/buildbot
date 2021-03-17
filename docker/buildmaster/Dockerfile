@@ -36,6 +36,10 @@ RUN \
 		"buildbot-worker==$BUILDBOT_VERSION" \
 		pyOpenSSL \
 		service_identity
+RUN \
+	sed -i \
+	's/Welcome to buildbot/Welcome to OpenWrt buildbot/' \
+	/usr/local/lib/python*/dist-packages/buildbot_www/static/scripts.js
 
 ENV LANG=en_US.utf8
 
