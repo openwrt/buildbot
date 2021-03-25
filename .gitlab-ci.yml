@@ -1,5 +1,6 @@
 variables:
   BUILDBOT_VERSION: 3.0.2
+  OPENWRT_VERSION: $CI_COMMIT_SHORT_SHA
 
 include:
   - local: .gitlab/docker.yml

@@ -3,6 +3,7 @@ MAINTAINER  OpenWrt Maintainers
 
 ARG         DEBIAN_FRONTEND=noninteractive
 ARG         BUILDBOT_VERSION=2.10.1
+ARG         OPENWRT_VERSION=unknown
 
 ENV         BUILDMASTER_CONFIG config.ini
 ENV         BUILDMASTER_PHASE  1
@@ -39,6 +40,11 @@ RUN \
 RUN \
 	sed -i \
 	's/Welcome to buildbot/Welcome to OpenWrt buildbot/' \
+	/usr/local/lib/python*/dist-packages/buildbot_www/static/scripts.js
+
+RUN \
+	sed -i \
+	"s;\"col-sm-12\"><ul><li ng-repeat;\"col-sm-12\"><ul><li>OpenWrt version: <a href=\"https://git.openwrt.org/$OPENWRT_VERSION\">$OPENWRT_VERSION</a></li><li ng-repeat;" \
 	/usr/local/lib/python*/dist-packages/buildbot_www/static/scripts.js
 
 ENV LANG=en_US.utf8

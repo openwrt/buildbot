@@ -17,7 +17,7 @@
   script:
     - export IMAGE_NAME="$(echo $CI_JOB_NAME | sed 's/build Docker image \(.*\)/\1/')"
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker build --build-arg BUILDBOT_VERSION=$BUILDBOT_VERSION -t "$IMAGE_NAME" -f "docker/$IMAGE_NAME/Dockerfile" .
+    - docker build --build-arg BUILDBOT_VERSION=$BUILDBOT_VERSION --build-arg OPENWRT_VERSION=$OPENWRT_VERSION -t "$IMAGE_NAME" -f "docker/$IMAGE_NAME/Dockerfile" .
     - docker tag "$IMAGE_NAME" "$CI_REGISTRY_IMAGE/$IMAGE_NAME-$BUILDBOT_VERSION:$CI_COMMIT_REF_SLUG"
     - docker push "$CI_REGISTRY_IMAGE/$IMAGE_NAME-$BUILDBOT_VERSION:$CI_COMMIT_REF_SLUG"
 
