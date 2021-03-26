@@ -22,6 +22,8 @@ RUN \
 		git-core \
 		gosu \
 		libncurses5-dev \
+		libelf-dev \
+		libdw-dev \
 		locales \
 		rsync \
 		signify-openbsd \
