@@ -21,20 +21,20 @@ RUN \
 		gcc-multilib \
 		git-core \
 		gosu \
-		libncurses5-dev \
-		libelf-dev \
 		libdw-dev \
+		libelf-dev \
+		libncurses5-dev \
 		locales \
-		rsync \
-		signify-openbsd \
-		subversion \
-		swig \
 		pv \
 		pwgen \
 		python \
 		python3 \
 		python3-pip \
 		qemu-utils \
+		rsync \
+		signify-openbsd \
+		subversion \
+		swig \
 		unzip \
 		wget && \
 	apt-get clean && \

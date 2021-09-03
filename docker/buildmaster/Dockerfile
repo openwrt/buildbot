@@ -19,10 +19,10 @@ RUN \
 		gosu \
 		libncurses5-dev \
 		locales \
-		signify-openbsd \
 		pv \
 		pwgen \
 		python3-pip \
+		signify-openbsd \
 		wget && \
 	apt-get clean && \
 	localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
