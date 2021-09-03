@@ -19,6 +19,7 @@ RUN \
 		curl \
 		gawk \
 		gcc-multilib \
+		genisoimage \
 		git-core \
 		gosu \
 		libdw-dev \
