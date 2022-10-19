@@ -10,13 +10,6 @@ status_user = example
 status_password = example
 expire = 1209600
 port = 9989
-git_ssh = true
-git_ssh_key = -----BEGIN RSA PRIVATE KEY-----
-	MIIEpAIBAAKCAQEAuCJwo6OmrRDxcGfsMgBhq0vdzp2ZIdqnedFH8u6tVYLt9WDU
-	...
-	mHzkh8Uv4OAWTjiLGycbXa0/31hu9PCeNzYmjjrp8tcGjsiJJFxydgS+wc0i2UPV
-	nSI+JbmAAF9vw6gj2i+Hqx7UloRd0tEv/leX354T5lO06LMiNhvN9g==
-	-----END RSA PRIVATE KEY-----
 config_seed = # Seed configuration
 	CONFIG_BUILDBOT=y
 	CONFIG_DEVEL=y
