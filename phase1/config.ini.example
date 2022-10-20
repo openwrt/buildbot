@@ -8,7 +8,6 @@ buildbot_url = http://phase1.builds.openwrt.org/
 status_bind = tcp:8010:interface=127.0.0.1
 status_user = example
 status_password = example
-expire = 1209600
 port = 9989
 config_seed = # Seed configuration
 	CONFIG_BUILDBOT=y
