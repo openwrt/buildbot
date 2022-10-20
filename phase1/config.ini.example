@@ -53,11 +53,9 @@ comment = Unattended build signature
 phase = 1
 name = example-worker-1
 password = example
-builds = 3
 
 [worker 2]
 phase = 1
 name = example-worker-2
 password = example2
-builds = 1
 cleanup = 1
