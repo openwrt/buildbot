@@ -57,4 +57,3 @@ password = example
 phase = 1
 name = example-worker-2
 password = example2
-cleanup = 1
