@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 tarball="$1"
+branch="$2"
 
 tmpdir="signall.$$"
 tarball="$(readlink -f "$tarball")"
@@ -50,12 +51,21 @@ case "$(gpg --version | head -n1)" in
 	*\ 2.*) loopback=1 ;;
 esac
 
+if [ -z "$branch" ]; then
 GPGKEY="$(iniget "${CONFIG_INI:-config.ini}" gpg key)"
 GPGPASS="$(iniget "${CONFIG_INI:-config.ini}" gpg passphrase)"
 GPGCOMMENT="$(iniget "${CONFIG_INI:-config.ini}" gpg comment)"
 
 USIGNKEY="$(iniget "${CONFIG_INI:-config.ini}" usign key)"
 USIGNCOMMENT="$(iniget "${CONFIG_INI:-config.ini}" usign comment)"
+else
+GPGKEY="$(iniget "${CONFIG_INI:-config.ini}" "branch $branch" "gpg_key")"
+GPGPASS="$(iniget "${CONFIG_INI:-config.ini}" "branch $branch" "gpg_passphrase")"
+GPGCOMMENT="$(iniget "${CONFIG_INI:-config.ini}" "branch $branch" "gpg_comment")"
+
+USIGNKEY="$(iniget "${CONFIG_INI:-config.ini}" "branch $branch" "usign_key")"
+USIGNCOMMENT="$(iniget "${CONFIG_INI:-config.ini}" "branch $branch" "usign_comment")"
+fi
 
 if echo "$GPGKEY" | grep -q "BEGIN PGP PRIVATE KEY BLOCK"; then
 	umask 077
