@@ -9,12 +9,6 @@ status_bind = tcp:8010:interface=127.0.0.1
 status_user = example
 status_password = example
 port = 9989
-config_seed = # Seed configuration
-	CONFIG_BUILDBOT=y
-	CONFIG_DEVEL=y
-	CONFIG_CCACHE=n
-	CONFIG_KERNEL_KALLSYMS=y
-	CONFIG_AUTOREMOVE=y
 
 [irc]
 host = irc.freenode.net
@@ -25,28 +19,38 @@ password = example
 
 [repo]
 url = https://git.openwrt.org/openwrt/openwrt.git
-branch = master
 
-[rsync]
-binary_url = user@example.org::upload-binary
-binary_password = example
-source_url = user@example.org::upload-sources
-source_password = example2
-
-[gpg]
-key = -----BEGIN PGP PRIVATE KEY BLOCK-----
+# branches should be listed by decreasing build priority order, typically oldest branch first (less build intensive)
+# branch section name should match branch "name" option until signall.sh is reworked
+[branch openwrt-21.02]
+name = openwrt-21.02
+gpg_key = -----BEGIN PGP PRIVATE KEY BLOCK-----
 	Version: GnuPG v2
 
 	mQGNBFX4kxkBDACcTUVUl6zbn4r9tDap0/aCpcK9MO+HPatS7p2aBGY51kh78Ixr
 	...
 	HwHLaFTMvYFY7WJDwA==
 	-----END PGP PRIVATE KEY BLOCK-----
-passphrase = secret password
-comment = Unattended build signature
+gpg_passphrase = secret password
+gpg_comment = Unattended build signature
+usign_key = RWRCSwAAA...OihABfuLvGRVfVaJ6wLf0=
+usign_comment = Unattended build signature
+binary_url = user@example.org::upload-binary
+binary_password = example
+source_url = user@example.org::upload-sources
+source_password = example2
+config_seed = # Seed configuration
+	CONFIG_BUILDBOT=y
+	CONFIG_DEVEL=y
+	CONFIG_CCACHE=n
+	CONFIG_KERNEL_KALLSYMS=y
+	CONFIG_AUTOREMOVE=y
 
-[usign]
-key = RWRCSwAAA...OihABfuLvGRVfVaJ6wLf0=
-comment = Unattended build signature
+[branch openwrt-22.03]
+name = openwrt-22.03
+
+[branch master]
+name = master
 
 [worker 1]
 phase = 1
