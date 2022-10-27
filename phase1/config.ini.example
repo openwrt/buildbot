@@ -61,3 +61,10 @@ password = example
 phase = 1
 name = example-worker-2
 password = example2
+# for workers which share a common pipe, ul/dl resource-access locks can be defined.
+# if the identifier is the same for both ul/dl, then all ul/dl operations will be serialized between workers having the same id.
+# if the identifier differs for ul and dl, then dl operations will be serialized independently of ul operations.
+ul_lock = host1
+dl_lock = host1
+# tag_only workers will only build forced tag buildrequests (i.e. release builds)
+tag_only = yes
