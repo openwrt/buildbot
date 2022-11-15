@@ -68,3 +68,5 @@ ul_lock = host1
 dl_lock = host1
 # tag_only workers will only build forced tag buildrequests (i.e. release builds)
 tag_only = yes
+# if rsync operations must prefer ipv4 ('rsync -4'), set the following
+rsync_ipv4 = yes
