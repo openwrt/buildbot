@@ -18,6 +18,7 @@ RUN \
 		ccache \
 		curl \
 		gawk \
+		g++-multilib \
 		gcc-multilib \
 		genisoimage \
 		git-core \
