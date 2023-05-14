@@ -21,3 +21,5 @@ phase[12]/twistd.*
 !.gitlab
 !.gitlab/*
 !.gitlab/**/*
+!.github
+!.github/**/*

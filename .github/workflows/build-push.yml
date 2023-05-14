@@ -1,0 +1,88 @@
+name: Build and push containers
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*'
+  pull_request:
+
+env:
+  BUILDBOT_VERSION: 3.5.0
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build-test-push:
+    name: Build, test and push containers
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+
+    strategy:
+      fail-fast: ${{ github.event_name == 'pull_request' }}
+      matrix:
+        container_flavor:
+          - master
+          - worker
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Environment variables
+        run: |
+          echo "GIT_SHA_SHORT=${GITHUB_SHA::8}" >> $GITHUB_ENV
+
+      - name: Build container and export it to local Docker
+        uses: docker/build-push-action@v4
+        with:
+          load: true
+          tags: local/${{ matrix.container_flavor }}
+          file: docker/build${{ matrix.container_flavor }}/Dockerfile
+          build-args: |
+            BUILDBOT_VERSION=${{ env.BUILDBOT_VERSION }}
+            OPENWRT_VERSION=${{ env.GIT_SHA_SHORT }}
+
+      - name: Test master Docker container
+        if: matrix.container_flavor == 'master'
+        run: |
+          docker run --detach --name test-master local/master
+          sleep 5
+          docker logs test-master | tee master.log
+          grep "buildmaster configured in /master" master.log
+
+      - name: Test worker Docker container
+        if: matrix.container_flavor == 'worker'
+        run: |
+          docker run --detach --env BUILDWORKER_NAME=X --env BUILDWORKER_PASSWORD=Y --name test-worker local/worker
+          sleep 5
+          docker logs test-worker | tee worker.log
+          grep "worker configured in /builder" worker.log
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: name=ghcr.io/${{ github.actor }}/build${{ matrix.container_flavor }}-v${{ env.BUILDBOT_VERSION }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build container again and push it
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: docker/build${{ matrix.container_flavor }}/Dockerfile
+          build-args: |
+            BUILDBOT_VERSION=${{ env.BUILDBOT_VERSION }}
+            OPENWRT_VERSION=${{ env.GIT_SHA_SHORT }}
