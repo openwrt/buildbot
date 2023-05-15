@@ -65,14 +65,14 @@ jobs:
 
       - name: Docker meta
         id: meta
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' || github.repository_owner != 'openwrt'
         uses: docker/metadata-action@v4
         with:
           images: name=ghcr.io/${{ github.repository }}/build${{ matrix.container_flavor }}-v${{ env.BUILDBOT_VERSION }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' || github.repository_owner != 'openwrt'
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -80,7 +80,7 @@ jobs:
 
       - name: Build container again and push it
         uses: docker/build-push-action@v4
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' || github.repository_owner != 'openwrt'
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
