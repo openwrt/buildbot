@@ -8,7 +8,7 @@ on:
   pull_request:
 
 env:
-  BUILDBOT_VERSION: 3.5.0
+  BUILDBOT_VERSION: 3.8.0
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
