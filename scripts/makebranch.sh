@@ -77,8 +77,8 @@ githash="$(git log --format=%h -1)"
 
 prev_branch="$(git symbolic-ref -q HEAD)"
 
-if [ "$prev_branch" != "refs/heads/master" ]; then
-	echo "Expecting current branch name to be \"master\"," \
+if [ "$prev_branch" != "refs/heads/main" ]; then
+	echo "Expecting current branch name to be \"main\"," \
 	     "but it is \"${prev_branch#refs/heads/}\" - aborting."
 
 	exit 1
@@ -101,7 +101,7 @@ while read type name url; do
 
 					if [ -z "$ref" ]; then
 						echo "WARNING: Feed \"$name\" provides no" \
-						     "\"lede-$version\" branch - using master!" >&2
+						     "\"lede-$version\" branch - using main!" >&2
 					else
 						url="$url;lede-$version"
 					fi
