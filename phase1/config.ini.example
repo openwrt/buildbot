@@ -17,6 +17,10 @@ channel = #example-channel
 nickname = example-builder
 password = example
 
+#[webhook]
+#url = https://api.github.com/repos/openwrt/docker/actions/workflows/containers.yml/dispatches
+#token = ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
 [repo]
 url = https://git.openwrt.org/openwrt/openwrt.git
 
