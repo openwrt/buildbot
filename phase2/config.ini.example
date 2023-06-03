@@ -20,7 +20,7 @@ git_ssh_key = -----BEGIN RSA PRIVATE KEY-----
 
 [repo]
 url = https://git.openwrt.org/openwrt/openwrt.git
-branch = master
+branch = main
 
 [rsync]
 binary_url = user@example.org::upload-packages
