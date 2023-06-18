@@ -39,9 +39,8 @@ jobs:
       - name: Lint with ruff
         run: ruff phase*/master.cfg
 
-# FIXME
-#     - name: Stylecheck with black
-#       run: black phase*/master.cfg
+      - name: Stylecheck with black
+        run: black phase1/master.cfg
 
   build-test-push:
     name: Build, test and push containers
