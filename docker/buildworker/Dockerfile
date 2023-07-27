@@ -45,6 +45,7 @@ RUN \
 RUN pip3 install -U pip
 RUN pip3 install \
 		"buildbot-worker==$BUILDBOT_VERSION" \
+  		pyelftools \
 		pyOpenSSL \
 		service_identity
 
