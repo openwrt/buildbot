@@ -17,6 +17,25 @@ channel = #example-channel
 nickname = example-builder
 password = example
 
+# [webhook github]
+# url = https://api.github.com/repos/openwrt/docker/actions/workflows/containers.yml/dispatches
+# headers =
+#	Accept: application/vnd.github+json
+# 	Authorization: Bearer ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+# 	X-GitHub-Api-Version: 2022-11-28
+# payload =
+# 	{ "ref": "main",
+# 		"inputs": {
+# 			"ref": %(prop:branch)s,
+# 			"target": %(prop:target)s
+# 		}
+# 	}
+
+# [webhook foobar]
+# url =
+# headers =
+# payload
+
 [repo]
 url = https://git.openwrt.org/openwrt/openwrt.git
 
