@@ -43,8 +43,8 @@ jobs:
       - name: Stylecheck with black
         run: black phase1/master.cfg
 
-  build-test-push:
-    name: Build, test and push containers
+  build-test:
+    name: Build and Test container
     runs-on: ubuntu-latest
     needs: test-lint
 
@@ -86,16 +86,39 @@ jobs:
           docker logs test-${{ matrix.container_flavor }} | tee ${{ matrix.container_flavor }}.log
           grep "${{ matrix.container_verify_string }}" ${{ matrix.container_flavor }}.log
 
+  deploy:
+    name: Push Container
+    if: github.event_name != 'pull_request' || github.repository_owner != 'openwrt'
+    runs-on: ubuntu-latest
+    needs: build-test
+
+    environment: production
+
+    permissions:
+      packages: write
+
+    strategy:
+      matrix:
+        container_flavor:
+          - master
+          - worker
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Environment variables
+        run: |
+          echo "GIT_SHA_SHORT=${GITHUB_SHA::${{ env.GITHUB_SHA_LEN }}}" >> $GITHUB_ENV
+
       - name: Docker meta
         id: meta
-        if: github.event_name != 'pull_request' || github.repository_owner != 'openwrt'
         uses: docker/metadata-action@v4
         with:
           images: name=ghcr.io/${{ github.repository }}/build${{ matrix.container_flavor }}-v${{ env.BUILDBOT_VERSION }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
-        if: github.event_name != 'pull_request' || github.repository_owner != 'openwrt'
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -103,7 +126,6 @@ jobs:
 
       - name: Build container again and push it
         uses: docker/build-push-action@v4
-        if: github.event_name != 'pull_request' || github.repository_owner != 'openwrt'
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
