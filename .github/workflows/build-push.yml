@@ -9,6 +9,7 @@ on:
 
 env:
   BUILDBOT_VERSION: 3.8.0
+  GITHUB_SHA_LEN: 8
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -63,7 +64,7 @@ jobs:
 
       - name: Environment variables
         run: |
-          echo "GIT_SHA_SHORT=${GITHUB_SHA::8}" >> $GITHUB_ENV
+          echo "GIT_SHA_SHORT=${GITHUB_SHA::${{ env.GITHUB_SHA_LEN }}}" >> $GITHUB_ENV
 
       - name: Build container and export it to local Docker
         uses: docker/build-push-action@v4
