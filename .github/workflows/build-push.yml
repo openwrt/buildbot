@@ -54,9 +54,12 @@ jobs:
     strategy:
       fail-fast: ${{ github.event_name == 'pull_request' }}
       matrix:
-        container_flavor:
-          - master
-          - worker
+        include:
+          - container_flavor: master
+            container_verify_string: "buildmaster configured in /master"
+          - container_flavor: worker
+            container_test_command: "--env BUILDWORKER_NAME=X --env BUILDWORKER_PASSWORD=Y"
+            container_verify_string: "worker configured in /builder"
 
     steps:
       - name: Checkout
@@ -76,21 +79,12 @@ jobs:
             BUILDBOT_VERSION=${{ env.BUILDBOT_VERSION }}
             OPENWRT_VERSION=${{ env.GIT_SHA_SHORT }}
 
-      - name: Test master Docker container
-        if: matrix.container_flavor == 'master'
+      - name: Test ${{ matrix.container_flavor }} Docker container
         run: |
-          docker run --detach --name test-master local/master
+          docker run --detach ${{ matrix.container_test_command }} --name test-${{ matrix.container_flavor }} local/${{ matrix.container_flavor }}
           sleep 5
-          docker logs test-master | tee master.log
-          grep "buildmaster configured in /master" master.log
-
-      - name: Test worker Docker container
-        if: matrix.container_flavor == 'worker'
-        run: |
-          docker run --detach --env BUILDWORKER_NAME=X --env BUILDWORKER_PASSWORD=Y --name test-worker local/worker
-          sleep 5
-          docker logs test-worker | tee worker.log
-          grep "worker configured in /builder" worker.log
+          docker logs test-${{ matrix.container_flavor }} | tee ${{ matrix.container_flavor }}.log
+          grep "${{ matrix.container_verify_string }}" ${{ matrix.container_flavor }}.log
 
       - name: Docker meta
         id: meta
