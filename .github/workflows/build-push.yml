@@ -83,8 +83,8 @@ jobs:
         run: |
           docker run --detach ${{ matrix.container_test_command }} --name test-${{ matrix.container_flavor }} local/${{ matrix.container_flavor }}
           sleep 5
-          docker logs test-${{ matrix.container_flavor }} | tee ${{ matrix.container_flavor }}.log
-          grep "${{ matrix.container_verify_string }}" ${{ matrix.container_flavor }}.log
+          pip install cram
+          cram --verbose "tests/cram/${{ matrix.container_flavor }}"
 
   deploy:
     name: Push Container
