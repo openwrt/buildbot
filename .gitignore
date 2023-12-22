@@ -25,3 +25,5 @@ phase[12]/twistd.*
 !.github/**/*
 !requirements-dev.txt
 !.ruff.toml
+!tests
+!tests/**/*
