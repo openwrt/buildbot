@@ -36,6 +36,7 @@ RUN \
 		"buildbot-console-view==$BUILDBOT_VERSION" \
 		"buildbot-grid-view==$BUILDBOT_VERSION" \
 		"buildbot-worker==$BUILDBOT_VERSION" \
+		"twisted==22.10.0" \
 		pyOpenSSL \
 		service_identity
 RUN \
