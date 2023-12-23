@@ -40,6 +40,9 @@ jobs:
       - name: Lint with ruff
         run: ruff phase*/master.cfg
 
+      - name: Lint with flake8
+        run: flake8 phase*/master.cfg
+
       - name: Stylecheck with black
         run: black phase1/master.cfg
 
