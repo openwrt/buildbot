@@ -27,3 +27,4 @@ phase[12]/twistd.*
 !.ruff.toml
 !tests
 !tests/**/*
+!.flake8
