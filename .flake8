@@ -1,0 +1,4 @@
+[flake8]
+max-line-length = 140
+per-file-ignores =
+    phase2/master.cfg: E101,E117,E128,E201,E202,E203,E221,E225,E251,E266,E302,E305,E501,W191
