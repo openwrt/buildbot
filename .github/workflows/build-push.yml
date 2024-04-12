@@ -118,7 +118,7 @@ jobs:
           images: name=ghcr.io/${{ github.repository }}/build${{ matrix.container_flavor }}-v${{ env.BUILDBOT_VERSION }}
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
