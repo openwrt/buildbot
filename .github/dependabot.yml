@@ -1,0 +1,15 @@
+# Set update schedule for GitHub Actions
+
+version: 2
+updates:
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      # Check for updates to GitHub Actions every week
+      interval: "weekly"
+    # Prefix all commit messages with "CI" plus its scope, that is, a
+    # list of updated dependencies
+    commit-message:
+      prefix: "CI"
+      include: "scope"
