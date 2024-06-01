@@ -45,6 +45,11 @@ config_seed = # Seed configuration
 	CONFIG_CCACHE=n
 	CONFIG_KERNEL_KALLSYMS=y
 	CONFIG_AUTOREMOVE=y
+build_targets = armsr/armv8
+	malta/be
+	mediatek/filogic
+	qualcommax/ipq807x
+	x86/64
 
 [branch openwrt-22.03]
 name = openwrt-22.03
