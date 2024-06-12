@@ -19,6 +19,7 @@ password = example
 
 [repo]
 url = https://git.openwrt.org/openwrt/openwrt.git
+tree_stable_timer = 900
 
 # branches should be listed by decreasing build priority order, typically oldest branch first (less build intensive)
 # branch section name should match branch "name" option until signall.sh is reworked
