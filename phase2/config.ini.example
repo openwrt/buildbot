@@ -46,6 +46,12 @@ comment = Unattended build signature
 key = RWRCSwAAA...OihABfuLvGRVfVaJ6wLf0=
 comment = Unattended build signature
 
+[apk]
+key = -----BEGIN EC PRIVATE KEY-----
+	MHcCAQEEIIP54p1G0UgCleLObh07Gxq0S0Iz22OQpkUj8S1AzXB9oAoGCCqGSM49
+	...
+	-----END EC PRIVATE KEY-----
+
 [worker 1]
 phase = 2
 name = worker-example-1
@@ -57,4 +63,3 @@ phase = 2
 name = worker-example-2
 password = example2
 builds = 3
-

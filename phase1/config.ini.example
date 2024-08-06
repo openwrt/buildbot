@@ -36,6 +36,10 @@ gpg_passphrase = secret password
 gpg_comment = Unattended build signature
 usign_key = RWRCSwAAA...OihABfuLvGRVfVaJ6wLf0=
 usign_comment = Unattended build signature
+apk_key = -----BEGIN EC PRIVATE KEY-----
+	MHcCAQEEIIP54p1G0UgCleLObh07Gxq0S0Iz22OQpkUj8S1AzXB9oAoGCCqGSM49
+	...
+	-----END EC PRIVATE KEY-----
 binary_url = user@example.org::upload-binary
 binary_password = example
 source_url = user@example.org::upload-sources
