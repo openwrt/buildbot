@@ -1,4 +1,4 @@
-FROM debian:9
+FROM debian:12
 
 COPY docker/rsync/files/entry.sh /entry.sh
 
