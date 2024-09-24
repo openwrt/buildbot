@@ -1,3 +1,28 @@
+FROM alpinelinux/build-base:latest-x86_64 AS apk-builder
+
+RUN abuild-apk add -u \
+	gcc \
+	git \
+	linux-headers \
+	lua5.3-dev \
+	lua5.3-lzlib \
+	make \
+	musl-dev \
+	openssl-dev \
+	openssl-libs-static \
+	zlib-dev \
+	zlib-static \
+	zstd-dev \
+	zstd-static
+
+ARG APK_TOOLS_COMMIT=74de0e9bd73d1af8720df40aa68d472943909804
+
+RUN git clone https://gitlab.alpinelinux.org/alpine/apk-tools.git /tmp/apk-tools
+WORKDIR /tmp/apk-tools
+RUN git checkout $APK_TOOLS_COMMIT
+RUN make -j$(nproc) static
+
+
 FROM        debian:11
 MAINTAINER  OpenWrt Maintainers
 
@@ -55,6 +80,7 @@ COPY docker/buildmaster/files/start.sh /start.sh
 COPY phase1 /phase1
 COPY phase2 /phase2
 COPY scripts /scripts
+COPY --from=apk-builder /tmp/apk-tools/src/apk.static /usr/bin/apk
 
 RUN \
     groupadd buildbot && \
