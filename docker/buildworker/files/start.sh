@@ -12,17 +12,14 @@
 
 rm -f /builder/buildbot.tac
 
-use_tls=""
-[ "$BUILDWORKER_TLS" = 1 ] && use_tls="--use-tls"
-/opt/venv/bin/buildbot-worker create-worker --force --umask="0o22" $use_tls /builder \
-    "$BUILDWORKER_MASTER" "$BUILDWORKER_NAME" "$BUILDWORKER_PASSWORD"
-
-if [ "$BUILDWORKER_TLS" = 1 ]; then
-	sed -i \
-		-e 's#(buildmaster_host, port, #(None, None, #' \
-		-e 's#allow_shutdown=allow_shutdown#&, connection_string="SSL:%s:%d" %(buildmaster_host, port)#' \
-		/builder/buildbot.tac
-fi
+/opt/venv/bin/buildbot-worker create-worker \
+	--force \
+	--umask="0o22" \
+	--connection-string="SSL:$BUILDWORKER_MASTER" \
+	/builder \
+	"$BUILDWORKER_MASTER" \
+	"$BUILDWORKER_NAME" \
+	"$BUILDWORKER_PASSWORD"
 
 echo "$BUILDWORKER_ADMIN" > /builder/info/admin
 echo "$BUILDWORKER_DESCRIPTION" > /builder/info/host
