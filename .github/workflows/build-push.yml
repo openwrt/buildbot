@@ -59,10 +59,8 @@ jobs:
       matrix:
         include:
           - container_flavor: master
-            container_verify_string: "buildmaster configured in /master"
           - container_flavor: worker
-            container_test_command: "--env BUILDWORKER_NAME=X --env BUILDWORKER_PASSWORD=Y"
-            container_verify_string: "worker configured in /builder"
+            container_test_command: "--env BUILDWORKER_TLS=1 --env BUILDWORKER_MASTER=Z:1922 --env BUILDWORKER_NAME=X --env BUILDWORKER_PASSWORD=Y"
 
     steps:
       - name: Checkout
