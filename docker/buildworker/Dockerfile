@@ -1,4 +1,4 @@
-FROM        debian:11
+FROM        debian:12
 MAINTAINER  OpenWrt Maintainers
 
 ARG         DEBIAN_FRONTEND=noninteractive
