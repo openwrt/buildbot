@@ -46,12 +46,15 @@ RUN \
 		locales \
 		pv \
 		pwgen \
+		python3-venv \
 		python3-pip \
 		signify-openbsd \
 		wget && \
 	apt-get clean && \
 	localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 RUN pip3 install -U pip
 RUN \
 	pip3 install \
@@ -63,15 +66,16 @@ RUN \
 		"buildbot-worker==$BUILDBOT_VERSION" \
 		pyOpenSSL \
 		service_identity
+
 RUN \
 	sed -i \
 	's/Welcome to buildbot/Welcome to OpenWrt buildbot/' \
-	/usr/local/lib/python*/dist-packages/buildbot_www/static/scripts.js
+	/opt/venv/lib/python*/site-packages/buildbot_www/static/scripts.js
 
 RUN \
 	sed -i \
 	"s;\"col-sm-12\"><ul><li ng-repeat;\"col-sm-12\"><ul><li>OpenWrt version: <a href=\"https://git.openwrt.org/$OPENWRT_VERSION\">$OPENWRT_VERSION</a></li><li ng-repeat;" \
-	/usr/local/lib/python*/dist-packages/buildbot_www/static/scripts.js
+	/opt/venv/lib/python*/site-packages/buildbot_www/static/scripts.js
 
 ENV LANG=en_US.utf8
 

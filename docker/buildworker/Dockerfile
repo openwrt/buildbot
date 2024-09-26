@@ -31,6 +31,7 @@ RUN \
 		pwgen \
 		python \
 		python3 \
+		python3-venv \
 		python3-pip \
 		qemu-utils \
 		rsync \
@@ -43,6 +44,8 @@ RUN \
 	apt-get clean && \
 	localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 RUN pip3 install -U pip
 RUN pip3 install \
 		"buildbot-worker==$BUILDBOT_VERSION" \

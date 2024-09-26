@@ -14,7 +14,7 @@ rm -f /builder/buildbot.tac
 
 use_tls=""
 [ "$BUILDWORKER_TLS" = 1 ] && use_tls="--use-tls"
-/usr/local/bin/buildbot-worker create-worker --force --umask="0o22" $use_tls /builder \
+/opt/venv/bin/buildbot-worker create-worker --force --umask="0o22" $use_tls /builder \
     "$BUILDWORKER_MASTER" "$BUILDWORKER_NAME" "$BUILDWORKER_PASSWORD"
 
 if [ "$BUILDWORKER_TLS" = 1 ]; then
@@ -30,4 +30,4 @@ echo "$BUILDWORKER_DESCRIPTION" > /builder/info/host
 unset BUILDWORKER_ADMIN BUILDWORKER_DESCRIPTION BUILDWORKER_MASTER BUILDWORKER_NAME BUILDWORKER_PASSWORD
 
 rm -f /builder/twistd.pid
-exec /usr/local/bin/buildbot-worker start --nodaemon /builder
+exec /opt/venv/bin/buildbot-worker start --nodaemon /builder
