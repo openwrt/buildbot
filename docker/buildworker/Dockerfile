@@ -17,6 +17,7 @@ RUN \
 		build-essential \
 		ccache \
 		curl \
+		file \
 		gawk \
 		g++-multilib \
 		gcc-multilib \
