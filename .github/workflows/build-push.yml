@@ -2,7 +2,7 @@ name: Build and push containers
 on:
   push:
     branches:
-      - master
+      - main
     tags:
       - 'v*'
   pull_request:
