@@ -72,12 +72,28 @@ APKSIGNKEY="$(iniget "${CONFIG_INI:-config.ini}" "branch $branch" "apk_key")"
 fi
 
 if [ -n "$APKSIGNKEY" ]; then
-    umask 077
-    echo "$APKSIGNKEY" > "$tmpdir/apk.pem"
+	umask 077
+	echo "$APKSIGNKEY" > "$tmpdir/apk.pem"
 
-    umask 022
-    find "$tmpdir/tar/" -type f -name "packages.adb" -exec \
-        "${APK_BIN:-apk}" adbsign --allow-untrusted --sign-key "$(readlink -f "$tmpdir/apk.pem")" "{}" \; || finish 6
+	umask 022
+	find "$tmpdir/tar/" -type f -name "packages.adb" -exec \
+		"${APK_BIN:-apk}" adbsign --allow-untrusted --sign-key "$(readlink -f "$tmpdir/apk.pem")" "{}" \; || finish 3
+
+	find "$tmpdir/tar/" -type f -name sha256sums | while read -r file; do
+		dir=$(dirname "$file")
+		pushd "$dir" || finish 3
+
+		grep 'packages\.adb' sha256sums | while IFS= read -r line; do
+			filename="${line#*' *'}"
+			escaped_filename="${filename//\//\\\/}"
+			escaped_filename="${escaped_filename//&/\\&}"
+			checksum_output=$(sha256sum --binary -- "$filename")
+			new_checksum_line="${checksum_output%% *} *${checksum_output#*' *'}"
+			sed -i "s#.*[[:space:]]\*$escaped_filename\$#$new_checksum_line#" sha256sums
+		done
+
+		popd || finish 3
+	done
 fi
 
 if echo "$GPGKEY" | grep -q "BEGIN PGP PRIVATE KEY BLOCK"; then
