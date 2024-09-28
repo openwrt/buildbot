@@ -71,6 +71,15 @@ USIGNCOMMENT="$(iniget "${CONFIG_INI:-config.ini}" "branch $branch" "usign_comme
 APKSIGNKEY="$(iniget "${CONFIG_INI:-config.ini}" "branch $branch" "apk_key")"
 fi
 
+if [ -n "$APKSIGNKEY" ]; then
+    umask 077
+    echo "$APKSIGNKEY" > "$tmpdir/apk.pem"
+
+    umask 022
+    find "$tmpdir/tar/" -type f -name "packages.adb" -exec \
+        "${APK_BIN:-apk}" adbsign --allow-untrusted --sign-key "$(readlink -f "$tmpdir/apk.pem")" "{}" \; || finish 6
+fi
+
 if echo "$GPGKEY" | grep -q "BEGIN PGP PRIVATE KEY BLOCK"; then
 	umask 077
 	echo "$GPGPASS" > "$tmpdir/gpg.pass"
@@ -103,15 +112,6 @@ if [ -n "$USIGNKEY" ]; then
 	umask 022
 	find "$tmpdir/tar/" -type f -not -name "*.asc" -and -not -name "*.sig" -exec \
 		signify-openbsd -S -s "$(readlink -f "$tmpdir/usign.sec")" -m "{}" \; || finish 5
-fi
-
-if [ -n "$APKSIGNKEY" ]; then
-    umask 077
-    echo "$APKSIGNKEY" > "$tmpdir/apk.pem"
-
-    umask 022
-    find "$tmpdir/tar/" -type f -name "packages.adb" -exec \
-        "${APK_BIN:-apk}" adbsign --allow-untrusted --sign-key "$(readlink -f "$tmpdir/apk.pem")" "{}" \; || finish 6
 fi
 
 tar -C "$tmpdir/tar/" -czf "$tarball" . || finish 6
