@@ -76,8 +76,11 @@ if [ -n "$APKSIGNKEY" ]; then
 	echo "$APKSIGNKEY" > "$tmpdir/apk.pem"
 
 	umask 022
-	find "$tmpdir/tar/" -type f -name "packages.adb" -exec \
-		"${APK_BIN:-apk}" adbsign --allow-untrusted --sign-key "$(readlink -f "$tmpdir/apk.pem")" "{}" \; || finish 3
+	find "$tmpdir/tar/" -type f -name "packages.adb" -print0 | while IFS= read -r -d '' file; do
+		if ! "${APK_BIN:-apk}" adbsign --allow-untrusted --sign-key "$(readlink -f "$tmpdir/apk.pem")" "$file"; then
+			finish 3
+		fi
+	done
 
 	find "$tmpdir/tar/" -type f -name sha256sums | while read -r file; do
 		dir=$(dirname "$file")
