@@ -102,6 +102,8 @@ my @additional_files;
 
 for my $feed (@feeds) {
     push @additional_files, (
+        "$feed/packages.adb.asc",
+        "$feed/packages.adb.sig",
         "$feed/Packages.asc",
         "$feed/Packages.sig",
     );
