@@ -97,12 +97,20 @@ while (defined($lline)) {
 
 # unconditionally add some mandatory files to rsynclist
 # add them last so they're transferred last: if everything else transferred correctly
-my @additional_files = qw(
-	packages/Packages.asc
-	packages/Packages.sig
-	sha256sums.asc
-	sha256sums.sig
-	sha256sums
+my @feeds = qw(base luci packages routing telephony);
+my @additional_files;
+
+for my $feed (@feeds) {
+    push @additional_files, (
+        "$feed/Packages.asc",
+        "$feed/Packages.sig",
+    );
+}
+
+push @additional_files, qw(
+    sha256sums.asc
+    sha256sums.sig
+    sha256sums
 );
 
 (my $basedir = $llist) =~ s!/[^/]+$!!;
