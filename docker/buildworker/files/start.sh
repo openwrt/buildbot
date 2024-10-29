@@ -21,7 +21,7 @@ rm -f /builder/buildbot.tac
 /opt/venv/bin/buildbot-worker create-worker \
 	--force \
 	--umask="0o22" \
-	--connection-string="${BUILDWORKER_TLS:+SSL:}$BUILDWORKER_MASTER" \
+	${BUILDWORKER_TLS:+--connection-string="SSL:$BUILDWORKER_MASTER"} \
 	/builder \
 	"$BUILDWORKER_MASTER" \
 	"$BUILDWORKER_NAME" \
