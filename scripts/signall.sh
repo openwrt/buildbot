@@ -84,7 +84,7 @@ if [ -n "$APKSIGNKEY" ]; then
 
 	find "$tmpdir/tar/" -type f -name sha256sums | while read -r file; do
 		dir=$(dirname "$file")
-		pushd "$dir" || finish 3
+		pushd "$dir" > /dev/null || finish 3
 
 		grep 'packages\.adb' sha256sums | while IFS= read -r line; do
 			filename="${line#*' *'}"
@@ -95,7 +95,7 @@ if [ -n "$APKSIGNKEY" ]; then
 			sed -i "s#.*[[:space:]]\*$escaped_filename\$#$new_checksum_line#" sha256sums
 		done
 
-		popd || finish 3
+		popd > /dev/null || finish 3
 	done
 fi
 
