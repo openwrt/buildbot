@@ -53,6 +53,7 @@ esac
 
 if [ -z "$branch" ]; then
 GPGKEY="$(iniget "${CONFIG_INI:-config.ini}" gpg key)"
+GPGKEYID="$(iniget "${CONFIG_INI:-config.ini}" gpg keyid)"
 GPGPASS="$(iniget "${CONFIG_INI:-config.ini}" gpg passphrase)"
 GPGCOMMENT="$(iniget "${CONFIG_INI:-config.ini}" gpg comment)"
 
@@ -62,6 +63,7 @@ USIGNCOMMENT="$(iniget "${CONFIG_INI:-config.ini}" usign comment)"
 APKSIGNKEY="$(iniget "${CONFIG_INI:-config.ini}" apk key)"
 else
 GPGKEY="$(iniget "${CONFIG_INI:-config.ini}" "branch $branch" "gpg_key")"
+GPGKEYID="$(iniget "${CONFIG_INI:-config.ini}" "branch $branch" "gpg_keyid")"
 GPGPASS="$(iniget "${CONFIG_INI:-config.ini}" "branch $branch" "gpg_passphrase")"
 GPGCOMMENT="$(iniget "${CONFIG_INI:-config.ini}" "branch $branch" "gpg_comment")"
 
@@ -99,7 +101,7 @@ if [ -n "$APKSIGNKEY" ]; then
 	done
 fi
 
-if echo "$GPGKEY" | grep -q "BEGIN PGP PRIVATE KEY BLOCK"; then
+if echo "$GPGKEY" | grep -q "BEGIN PGP PRIVATE KEY BLOCK" && [ -z "$GPGKEYID" ]; then
 	umask 077
 	echo "$GPGPASS" > "$tmpdir/gpg.pass"
 	echo "$GPGKEY" | gpg --batch --homedir "$tmpdir/gpg" \
@@ -115,6 +117,17 @@ if echo "$GPGKEY" | grep -q "BEGIN PGP PRIVATE KEY BLOCK"; then
 			${GPGPASS:+--passphrase-file "$(readlink -f "$tmpdir/gpg.pass")"} \
 			${GPGCOMMENT:+--comment="$GPGCOMMENT"} \
 			-o "{}.asc" "{}" \; || finish 4
+fi
+
+if [ -n "$GPGKEYID" ]; then
+	find "$tmpdir/tar/" -type f -not -name "*.asc" -and -not -name "*.sig" -print0 | while IFS= read -r -d '' file; do
+		if ! gpg --no-version --batch --detach-sign --armor \
+			--local-user "${GPGKEYID}" \
+			${GPGCOMMENT:+--comment="$GPGCOMMENT"} \
+			--homedir /home/buildbot/.gnupg "${file}.asc" "$file"; then
+			finish 4
+		fi
+	done
 fi
 
 if [ -n "$USIGNKEY" ]; then

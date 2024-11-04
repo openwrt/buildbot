@@ -95,6 +95,12 @@ RUN \
     chown buildbot:buildbot /master && \
     chmod 0755 /entry.sh /start.sh
 
+RUN \
+	mkdir -p /home/buildbot && \
+	chmod u=rwx,go= /home/buildbot && \
+	chown --recursive buildbot:buildbot /home/buildbot && \
+	gosu buildbot sh -c "gpg --homedir /home/buildbot/.gnupg --recv-keys 0x1D53D1877742E911"
+
 VOLUME [ "/master" ]
 ENTRYPOINT [ "/entry.sh" ]
 CMD [ "start" ]
