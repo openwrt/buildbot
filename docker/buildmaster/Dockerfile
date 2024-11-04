@@ -23,7 +23,7 @@ RUN git checkout $APK_TOOLS_COMMIT
 RUN make -j$(nproc) static
 
 
-FROM        debian:12
+FROM        debian:11
 MAINTAINER  OpenWrt Maintainers
 
 ARG         DEBIAN_FRONTEND=noninteractive
