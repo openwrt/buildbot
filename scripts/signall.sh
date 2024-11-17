@@ -90,6 +90,8 @@ if [ -n "$APKSIGNKEY" ]; then
 
 		grep 'packages\.adb' sha256sums | while IFS= read -r line; do
 			filename="${line#*' *'}"
+			# Skip updating hash of previous kmods/ if not found in sign tar (already signed)
+			[ ! -f "$filename" ] && [[ "$filename" == kmods/* ]] && continue
 			escaped_filename="${filename//\//\\\/}"
 			escaped_filename="${escaped_filename//&/\\&}"
 			checksum_output=$(sha256sum --binary -- "$filename")
