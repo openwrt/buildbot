@@ -34,6 +34,7 @@ RUN \
 		python3-venv \
 		python3-pip \
 		python3-pyelftools \
+		python3-cryptography \
 		qemu-utils \
 		rsync \
 		signify-openbsd \
