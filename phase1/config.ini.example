@@ -9,6 +9,7 @@ status_bind = tcp:8010:interface=127.0.0.1
 status_user = example
 status_password = example
 port = 9989
+feeds_host_override =
 
 [irc]
 host = irc.freenode.net
