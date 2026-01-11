@@ -1,13 +1,13 @@
 FROM        debian:11
-MAINTAINER  OpenWrt Maintainers
+LABEL       maintainer="OpenWrt Maintainers"
 
 ARG         DEBIAN_FRONTEND=noninteractive
 ARG         BUILDBOT_VERSION=2.10.1
 ARG         OPENWRT_VERSION=unknown
 
-ENV         BUILDWORKER_MASTER builds.openwrt.org:9990
-ENV         BUILDWORKER_ADMIN contact@openwrt.org
-ENV         BUILDWORKER_DESCRIPTION Docker Container https://git.openwrt.org/$OPENWRT_VERSION
+ENV         BUILDWORKER_MASTER=builds.openwrt.org:9990
+ENV         BUILDWORKER_ADMIN=contact@openwrt.org
+ENV         BUILDWORKER_DESCRIPTION="Docker Container https://git.openwrt.org/$OPENWRT_VERSION"
 
 USER root
 

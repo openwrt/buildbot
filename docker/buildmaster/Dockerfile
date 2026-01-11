@@ -24,14 +24,14 @@ RUN make -j$(nproc) static
 
 
 FROM        debian:11
-MAINTAINER  OpenWrt Maintainers
+LABEL       maintainer="OpenWrt Maintainers"
 
 ARG         DEBIAN_FRONTEND=noninteractive
 ARG         BUILDBOT_VERSION=2.10.1
 ARG         OPENWRT_VERSION=unknown
 
-ENV         BUILDMASTER_CONFIG config.ini
-ENV         BUILDMASTER_PHASE  1
+ENV         BUILDMASTER_CONFIG=config.ini
+ENV         BUILDMASTER_PHASE=1
 
 USER root
 
