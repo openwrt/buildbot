@@ -10,6 +10,7 @@ status_user = example
 status_password = example
 port = 9990
 persistent = false
+feeds_host_override =
 git_ssh = true
 git_ssh_key = -----BEGIN RSA PRIVATE KEY-----
 	MIIEpAIBAAKCAQEAuCJwo6OmrRDxcGfsMgBhq0vdzp2ZIdqnedFH8u6tVYLt9WDU
