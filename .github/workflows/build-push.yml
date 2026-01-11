@@ -146,7 +146,7 @@ jobs:
           images: ghcr.io/${{ github.repository }}/build${{ matrix.container_flavor }}-v${{ env.BUILDBOT_VERSION }}
           tags: |
             type=raw,value=pr-${{ inputs.pr_number }},enable=${{ github.event_name == 'workflow_dispatch' }}
-            type=ref,event=branch
+            type=ref,event=branch,enable=${{ github.event_name != 'workflow_dispatch' }}
             type=sha,prefix=sha-,enable=${{ github.event_name != 'workflow_dispatch' }}
             type=semver,pattern={{version}}
 
