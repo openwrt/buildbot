@@ -3,12 +3,12 @@ LABEL       maintainer="OpenWrt Maintainers"
 
 ARG         DEBIAN_FRONTEND=noninteractive
 ARG         BUILDBOT_VERSION=2.10.1
-ARG         OPENWRT_VERSION=unknown
+ARG         BUILDBOT_CONFIG_SHA=unknown
 ARG         CONTAINER_TAG=unknown
 
 ENV         BUILDWORKER_MASTER=builds.openwrt.org:9990
 ENV         BUILDWORKER_ADMIN=contact@openwrt.org
-ENV         BUILDWORKER_DESCRIPTION="Container ($CONTAINER_TAG) https://git.openwrt.org/$OPENWRT_VERSION"
+ENV         BUILDWORKER_DESCRIPTION="Container ($CONTAINER_TAG) https://git.openwrt.org/$BUILDBOT_CONFIG_SHA"
 
 USER root
 

@@ -94,7 +94,7 @@ jobs:
           file: docker/build${{ matrix.container_flavor }}/Dockerfile
           build-args: |
             BUILDBOT_VERSION=${{ env.BUILDBOT_VERSION }}
-            OPENWRT_VERSION=${{ env.GIT_SHA_SHORT }}
+            BUILDBOT_CONFIG_SHA=${{ env.GIT_SHA_SHORT }}
             CONTAINER_TAG=${{ env.CONTAINER_TAG }}
 
       - name: Test ${{ matrix.container_flavor }} Docker container
@@ -166,5 +166,5 @@ jobs:
           file: docker/build${{ matrix.container_flavor }}/Dockerfile
           build-args: |
             BUILDBOT_VERSION=${{ env.BUILDBOT_VERSION }}
-            OPENWRT_VERSION=${{ env.GIT_SHA_SHORT }}
+            BUILDBOT_CONFIG_SHA=${{ env.GIT_SHA_SHORT }}
             CONTAINER_TAG=${{ env.CONTAINER_TAG }}
