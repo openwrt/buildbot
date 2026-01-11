@@ -14,7 +14,6 @@ on:
         type: number
 
 env:
-  BUILDBOT_VERSION: 3.11.8
   GITHUB_SHA_LEN: 8
 
 concurrency:
@@ -77,6 +76,7 @@ jobs:
 
       - name: Environment variables
         run: |
+          echo "BUILDBOT_VERSION=$(cat .github/buildbot-version)" >> $GITHUB_ENV
           echo "GIT_SHA_SHORT=${GITHUB_SHA::${{ env.GITHUB_SHA_LEN }}}" >> $GITHUB_ENV
 
       - name: Build container and export it to local Docker
@@ -121,6 +121,7 @@ jobs:
 
       - name: Environment variables
         run: |
+          echo "BUILDBOT_VERSION=$(cat .github/buildbot-version)" >> $GITHUB_ENV
           echo "GIT_SHA_SHORT=${GITHUB_SHA::${{ env.GITHUB_SHA_LEN }}}" >> $GITHUB_ENV
 
       - name: Docker meta
