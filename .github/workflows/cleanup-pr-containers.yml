@@ -1,0 +1,32 @@
+name: Cleanup PR Containers
+
+on:
+  pull_request:
+    types: [closed]
+
+env:
+  BUILDBOT_VERSION: 3.11.8
+
+jobs:
+  cleanup:
+    name: Delete PR container images
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+
+    strategy:
+      matrix:
+        container_flavor:
+          - master
+          - worker
+
+    steps:
+      - name: Delete PR container image
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: buildbot/build${{ matrix.container_flavor }}-v${{ env.BUILDBOT_VERSION }}
+          package-type: container
+          delete-only-pre-release-versions: false
+          min-versions-to-keep: 0
+          delete-only-untagged-versions: false
+          version-pattern: pr-${{ github.event.pull_request.number }}
