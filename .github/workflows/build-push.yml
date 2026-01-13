@@ -148,8 +148,8 @@ jobs:
           tags: |
             type=raw,value=pr-${{ inputs.pr_number }},enable=${{ github.event_name == 'workflow_dispatch' }}
             type=ref,event=branch,enable=${{ github.event_name != 'workflow_dispatch' }}
+            type=ref,event=tag,enable=${{ github.event_name != 'workflow_dispatch' }}
             type=sha,prefix=sha-,enable=${{ github.event_name != 'workflow_dispatch' }}
-            type=semver,pattern={{version}}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
