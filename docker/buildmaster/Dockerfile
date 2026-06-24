@@ -23,7 +23,7 @@ RUN git checkout $APK_TOOLS_COMMIT
 RUN make -j$(nproc) static
 
 
-FROM        debian:11
+FROM        debian:13
 LABEL       maintainer="OpenWrt Maintainers"
 
 ARG         DEBIAN_FRONTEND=noninteractive
@@ -41,8 +41,9 @@ RUN \
 		build-essential \
 		gawk \
 		git-core \
+		gnupg \
 		gosu \
-		libncurses5-dev \
+		libncurses-dev \
 		locales \
 		pv \
 		pwgen \
@@ -65,7 +66,8 @@ RUN \
 		"buildbot-grid-view==$BUILDBOT_VERSION" \
 		"buildbot-worker==$BUILDBOT_VERSION" \
 		pyOpenSSL \
-		service_identity
+		service_identity \
+		legacy-cgi
 
 RUN \
 	sed -i \
