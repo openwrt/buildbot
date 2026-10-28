@@ -50,7 +50,7 @@ jobs:
         run: flake8 phase*/master.cfg
 
       - name: Stylecheck with black
-        run: black phase1/master.cfg
+        run: black --check --diff phase*/master.cfg
 
   build-test:
     name: Build and Test container
