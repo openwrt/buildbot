@@ -2,25 +2,50 @@ FROM alpinelinux/build-base:latest-x86_64 AS apk-builder
 
 RUN abuild-apk add -u \
 	gcc \
-	git \
 	linux-headers \
 	lua5.3-dev \
 	lua5.3-lzlib \
-	make \
+	meson \
 	musl-dev \
+	ninja \
 	openssl-dev \
 	openssl-libs-static \
+	patch \
 	zlib-dev \
 	zlib-static \
+	zstd \
 	zstd-dev \
 	zstd-static
 
-ARG APK_TOOLS_COMMIT=74de0e9bd73d1af8720df40aa68d472943909804
+# apk-tools 3.0.5 is the version pinned in OpenWrt main and openwrt-25.12
+ARG APK_TOOLS_VERSION=3.0.5
+ARG APK_TOOLS_SHA256=bdb70571302d4baeafd4558522a49ce4c834c2acb51b954a19a3eea7f20b01b7
+ARG APK_TOOLS_URL=https://sources.openwrt.org/apk-${APK_TOOLS_VERSION}.tar.zst
 
-RUN git clone https://gitlab.alpinelinux.org/alpine/apk-tools.git /tmp/apk-tools
-WORKDIR /tmp/apk-tools
-RUN git checkout $APK_TOOLS_COMMIT
-RUN make -j$(nproc) static
+WORKDIR /tmp
+RUN wget -O apk-tools.tar.zst "$APK_TOOLS_URL"
+RUN echo "$APK_TOOLS_SHA256  apk-tools.tar.zst" | sha256sum -c - && \
+	tar --zstd -xf apk-tools.tar.zst
+
+WORKDIR /tmp/apk-${APK_TOOLS_VERSION}
+COPY docker/buildmaster/patches /tmp/apk-patches
+RUN for p in /tmp/apk-patches/*.patch; do patch -p1 < "$p" || exit 1; done
+RUN VERSION=${APK_TOOLS_VERSION} meson setup build \
+		--buildtype=release \
+		-Db_lto=true \
+		-Ddefault_library=static \
+		-Dc_link_args=-static \
+		-Dprefer_static=true \
+		-Dcrypto_backend=openssl \
+		-Durl_backend=libfetch \
+		-Dhelp=enabled \
+		-Dlua_version=5.3 \
+		-Dlua=disabled \
+		-Dpython=disabled \
+		-Ddocs=disabled \
+		-Dtests=disabled \
+		-Dzstd=enabled && \
+	meson compile -C build
 
 
 FROM        debian:13
@@ -86,7 +111,7 @@ COPY docker/buildmaster/files/start.sh /start.sh
 COPY phase1 /phase1
 COPY phase2 /phase2
 COPY scripts /scripts
-COPY --from=apk-builder /tmp/apk-tools/src/apk.static /usr/bin/apk
+COPY --from=apk-builder /tmp/apk-3.0.5/build/src/apk /usr/bin/apk
 
 RUN \
     groupadd buildbot && \
