@@ -44,7 +44,7 @@ jobs:
         run: pip install -r requirements-dev.txt
 
       - name: Lint with ruff
-        run: ruff phase*/master.cfg
+        run: ruff check phase*/master.cfg
 
       - name: Lint with flake8
         run: flake8 phase*/master.cfg
