@@ -92,7 +92,8 @@ RUN \
 		"buildbot-worker==$BUILDBOT_VERSION" \
 		legacy-cgi \
 		pyOpenSSL \
-		service_identity
+		service_identity \
+		legacy-cgi
 
 RUN \
 	sed -i \

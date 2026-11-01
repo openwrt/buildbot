@@ -40,6 +40,7 @@ RUN \
 		qemu-utils \
 		rsync \
 		signify-openbsd \
+		shfmt \
 		subversion \
 		swig \
 		unzip \
@@ -56,7 +57,9 @@ RUN pip3 install \
 		legacy-cgi \
 		pyelftools \
 		pyOpenSSL \
-		service_identity
+		service_identity \
+		legacy-cgi
+
 
 
 ENV LANG=en_US.utf8
